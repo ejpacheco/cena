@@ -60,6 +60,8 @@ session_start();
          include "app/vistas/Home/Factura/ListadoDeFacturas.php";
       elseif (isset($_GET["ruta"]) && $_GET["ruta"] == "RegistrarFacturaCena") :
          include "app/vistas/Home/Factura/RegistrarFacturaCena.php";
+      elseif (isset($_GET["ruta"]) && $_GET["ruta"] == "inventario") :
+         include "app/vistas/Home/Inventario/Inventario.php";
       elseif (isset($_GET["ruta"]) && $_GET["ruta"] == "logout") :
          include "app/vistas/Login/logout.php";
       else :

@@ -72,6 +72,11 @@ class CenaControlador
         $respuesta = CenaModelo::GuardarAbono($id);
         return $respuesta;
     }
+    public function ListarInventario()
+    {
+        $respuesta = CenaModelo::ListarInventario();
+        return $respuesta;
+    }
 }
 
 if (isset($_POST["opcion"])) {
@@ -208,6 +213,10 @@ if (isset($_POST["opcion"])) {
         } else {
             echo 2;
         }
+    elseif ($_POST["opcion"] == "ListarInventario") :
+        $respuesta = new CenaControlador();
+        $respuesta = $respuesta->ListarInventario();
+        echo json_encode($respuesta, JSON_UNESCAPED_UNICODE);
     //   echo $id_factura."-".$saldo_pendiente."-".$abono."-".$_POST["opcion"]."-".$abono;
     endif;
 }

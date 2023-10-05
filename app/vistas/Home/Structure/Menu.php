@@ -44,7 +44,12 @@
                         </li>
                     </ul>
                 </li>
-
+                <li class="sidebar-item ">
+                    <a href="inventario" class='sidebar-link'>
+                    <i class="bi bi-handbag-fill"></i>
+                        <span>Inventario</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>

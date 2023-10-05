@@ -190,4 +190,20 @@ class CenaModelo
 
             return true;
       }
+
+      static public function ListarInventario()
+      {
+            $x = Conexion::conectar()->prepare("SELECT T.tbl_productos_id as id_producto, T.tbl_productos_nombre as nombre_producto, T.tbl_producto_cantidad as cantidad FROM tbl_productos as T ");
+            $x->execute();
+
+            return $x->fetchAll(PDO::FETCH_ASSOC);
+      }
+
+      static public function ActualizarInventario($datos)
+      {
+            $x = Conexion::conectar()->prepare("UPDATE tbl_productos SET tbl_producto_cantidad = 0 WHERE 1");
+            $x->execute();
+
+            return $x->fetchAll(PDO::FETCH_ASSOC);
+      }
 }

@@ -17,6 +17,7 @@ var jsEditarProducto = document.querySelector("#EditarProducto");
 var jsEditarProducto_precio = document.querySelector("#EditarProductoPrecio");
 var jsid_producto = document.querySelector("#id_producto");
 var jsBuscarProducto = document.querySelector("#Buscarproducto");
+var jsBuscarInventario = document.querySelector("#BuscarInventario");
 var jsBuscarCliente = document.querySelector("#BuscarCliente");
 var jsClienteNombre = document.querySelector("#cliente_nombre");
 var jsClienteTelefono = document.querySelector("#cliente_telefono");
@@ -57,6 +58,7 @@ var jsTablaFactura = document.querySelector("#TablaFactura");
 var jsllenarTablaVerFactura = document.querySelector("#LLenar_Productos_Factura");
 var jsTablaHistorialFactura = document.querySelector("#TablaHistorialFactura");
 var jsTablaFacturaCena= document.querySelector("#TablaFacturaCena");
+var jsTablaInventario = document.querySelector("#TablaInventario");
 
 // modales
 var modalEditarProducto = document.getElementById("ModalEditarProducto");
@@ -90,6 +92,7 @@ if (modalRegistrarAbono) {
 
 // botones
 var jsBotonBuscarProducto = document.querySelector(".btnBuscarProducto");
+var jsBotonBuscarInventario = document.querySelector(".btnBuscarInventario");
 var jsBotonBuscarCliente = document.querySelector(".btnBuscarCliente");
 var jsbtnAgregarAFactura = document.querySelector(".btnAgregarAFactura");
 var jsbtnRegistrarFactura = document.querySelector(".btnRegistrarFactura");
@@ -97,6 +100,7 @@ var jsBotonBuscarFactura = document.querySelector(".btnBuscarFactura");
 var BtnCalcularFacturaCena = document.querySelector(".btnCalcular");
 var btnRegistrarFacturaCena = document.querySelector(".btnRegistrarFacturaCena");
 var btnLimpiar = document.querySelector(".btnLimpiar");
+var jsBotonGuardarInventario = document.querySelector(".btnGuardarInventario");
 var opcion = "";
 
 // funcion para convertir texto en mayusculas
@@ -122,6 +126,115 @@ if (jsEditarCliente_Nombre) {
   jsEditarCliente_Nombre.addEventListener("keyup", function () {
     this.value = this.value.toUpperCase();
   });
+}
+
+//tabla de inventario
+function cargarTablaInventario() {
+  opcion = "ListarInventario";
+  var data = "opcion=" + opcion;
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "app/controlador/CenaControlador.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var listadoInventario = JSON.parse(this.responseText);
+      var listadoInventario_buscar = listadoInventario;
+      var tablaHtmlInventario = "";
+      var currentPage = 1; // Página actual
+      var rowsPerPage = 8; // Número de filas por página
+      var totalPages = Math.ceil(listadoInventario.length / rowsPerPage); // Total de páginas
+      var startIndex = 0; // Índice de inicio de la página actual
+      var endIndex = rowsPerPage; // Índice de fin de la página actual
+      var prevBtn = document.getElementById("prev-page");
+      var nextBtn = document.getElementById("next-page");
+      var currentPageElem = document.getElementById("current-page");
+
+      // Función para mostrar las filas correspondientes a la página actual
+      function showRows() {
+        tablaHtmlInventario = "";
+        for (var i = startIndex; i < endIndex; i++) {
+          if (listadoInventario[i]) {
+            var inventario = listadoInventario[i];
+            var fila = `
+            <tr>
+              <td>${i + 1}</td>
+              <td>${inventario.nombre_producto}</td>
+              <td><input type="text" value="${inventario.cantidad}" id="${inventario.id_producto}" name="${inventario.id_producto}" class="form-control"></td>
+            </tr>
+          `;
+            tablaHtmlInventario += fila;
+          }
+        }
+        jsTablaInventario.innerHTML = tablaHtmlInventario;
+        currentPageElem.textContent = currentPage;
+      }
+
+      // Función para actualizar los índices de inicio y fin de la página actual
+      function updateIndexes() {
+        startIndex = (currentPage - 1) * rowsPerPage;
+        endIndex = startIndex + rowsPerPage;
+        if (endIndex > listadoInventario.length) {
+          endIndex = listadoInventario.length;
+        }
+      }
+
+      // Mostrar las filas de la primera página
+      showRows();
+
+      // Mostrar el paginador
+      prevBtn.addEventListener("click", function () {
+        if (currentPage > 1) {
+          currentPage--;
+          updateIndexes();
+          showRows();
+        }
+      });
+
+      nextBtn.addEventListener("click", function () {
+        if (currentPage < totalPages) {
+          currentPage++;
+          updateIndexes();
+          showRows();
+        }
+      });
+
+      jsBotonBuscarInventario.addEventListener("click", function () {
+        var searchTerm = jsBuscarInventario.value.trim().toLowerCase(); // Obtener término de búsqueda y eliminar espacios en blanco
+        if (searchTerm !== "") {
+          // Filtrar los datos de la tabla por el término de búsqueda
+          var filteredData = listadoInventario.filter(function (producto) {
+            return (
+              producto.nombre_producto.toLowerCase().includes(searchTerm)
+            );
+          });
+          currentPage = 1;
+          totalPages = Math.ceil(filteredData.length / rowsPerPage);
+          startIndex = 0;
+          endIndex = rowsPerPage;
+          listadoInventario = filteredData;
+          showRows();
+        } else {
+          listadoInventario = listadoInventario_buscar;
+          currentPage = 1;
+          totalPages = Math.ceil(listadoInventario.length / rowsPerPage);
+          startIndex = 0;
+          endIndex = rowsPerPage;
+          showRows();
+        }
+      });
+    } else if (xhr.readyState === 4 && xhr.status !== 200) {
+      alert(
+        "Error en la solicitud: " +
+          xhr.status +
+          " " +
+          xhr.statusText +
+          " " +
+          xhr.response
+      );
+    }
+  };
+  xhr.send(data);
 }
 
 // funcion para cargar tabla de productos
@@ -345,7 +458,6 @@ function cargarTablaClientes() {
           endIndex = rowsPerPage;
           listadoCliente = filteredData;
           showRows();
-          console.log(filteredData);
         } else {
           listadoCliente = listadoCliente_buscar;
           currentPage = 1;
@@ -368,6 +480,16 @@ function cargarTablaClientes() {
   };
   xhr.send(data);
 }
+
+
+
+if (jsTablaInventario) {
+
+  document.addEventListener("DOMContentLoaded", cargarTablaInventario);
+}
+
+
+
 
 // evento para detectar click en los botones de la pagina de prodcutos
 if (jsTablaProducto) {
@@ -1168,7 +1290,7 @@ function ConsultarFactura(id_facturaG) {
         var celdaTotal = document.createElement("td");
         var celdaPrecio = document.createElement("td");
 
-        
+
         // Añadimos los valores a las celdas
         celdaCantidad.innerHTML ="&nbsp;&nbsp;"+cantidad.toLocaleString()+"-&nbsp;";
         celdaNombreProducto.innerHTML = nombre_producto+" - ";
@@ -1688,7 +1810,6 @@ if (btnRegistrarFacturaCena) {
         contf= contf+1;
       }
     }
-    console.log(factura);
     var data =
       "estado=" +
       estado +
@@ -1746,3 +1867,10 @@ if (btnLimpiar) {
      cargarTablaProducto();
   });
 }
+
+if(jsBotonGuardarInventario){
+  jsBotonGuardarInventario.addEventListener("click", function () {
+
+  });
+}
+
