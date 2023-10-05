@@ -77,6 +77,11 @@ class CenaControlador
         $respuesta = CenaModelo::ListarInventario();
         return $respuesta;
     }
+    public function ActualizarInventario($datos)
+    {
+        $respuesta = CenaModelo::ActualizarInventario($datos);
+        return $respuesta;
+    }
 }
 
 if (isset($_POST["opcion"])) {
@@ -101,6 +106,8 @@ if (isset($_POST["opcion"])) {
     $hora_actual = date('H:i A');
     $factura_productos_json = $_POST['factura_productos'] ?? null;
     $factura_productos = isset($factura_productos_json) ? json_decode($factura_productos_json, true) : null;
+    $inventario_productos_json = $_POST['inventario_productos'] ?? null;
+    $inventario_productos = isset($inventario_productos_json) ? json_decode($inventario_productos_json, true) : null;
     $fecha_creacion = $fecha_actual . " - " . $hora_actual;
     $id_factura = isset($_POST["id_factura"]) ? $_POST["id_factura"] : null;
     $cambio = isset($_POST["cambio"]) ? $_POST["cambio"] : null;
@@ -126,7 +133,7 @@ if (isset($_POST["opcion"])) {
             'id_factura' => $id_factura,
             'estado' => $estado,
             'abono_nuevo' => $abono_nuevo,
-            'cambio' => $cambio
+            'cambio' => $cambio,
         ];
 
     if ($_POST["opcion"] == "RegistrarProducto") :
@@ -217,6 +224,13 @@ if (isset($_POST["opcion"])) {
         $respuesta = new CenaControlador();
         $respuesta = $respuesta->ListarInventario();
         echo json_encode($respuesta, JSON_UNESCAPED_UNICODE);
-    //   echo $id_factura."-".$saldo_pendiente."-".$abono."-".$_POST["opcion"]."-".$abono;
+    elseif ($_POST["opcion"] == "ActualizarInventario") :
+        $respuesta = new CenaControlador();
+        $respuesta = $respuesta->ActualizarInventario($inventario_productos);
+        if ($respuesta) {
+            echo 1;
+        } else {
+            echo 2;
+        }
     endif;
 }

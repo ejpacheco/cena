@@ -201,9 +201,12 @@ class CenaModelo
 
       static public function ActualizarInventario($datos)
       {
-            $x = Conexion::conectar()->prepare("UPDATE tbl_productos SET tbl_producto_cantidad = 0 WHERE 1");
-            $x->execute();
-
-            return $x->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($datos as $key => $producto) {
+                  $x = Conexion::conectar()->prepare("UPDATE tbl_productos SET tbl_producto_cantidad = :cantidad WHERE tbl_productos_id=:id_producto");
+                  $x->bindParam(":id_producto", $key, PDO::PARAM_INT);
+                  $x->bindParam(":cantidad", $producto, PDO::PARAM_STR);
+                  $x->execute();
+            }
+            return true;
       }
 }

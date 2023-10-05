@@ -150,26 +150,28 @@ function cargarTablaInventario() {
       var nextBtn = document.getElementById("next-page");
       var currentPageElem = document.getElementById("current-page");
 
+      var inputValues = {};
       // Función para mostrar las filas correspondientes a la página actual
       function showRows() {
         tablaHtmlInventario = "";
         for (var i = startIndex; i < endIndex; i++) {
           if (listadoInventario[i]) {
             var inventario = listadoInventario[i];
+            // Obtén el valor del campo de entrada del objeto, si existe
+            var inputValue = inputValues[inventario.id_producto] || inventario.cantidad;
             var fila = `
-            <tr>
-              <td>${i + 1}</td>
-              <td>${inventario.nombre_producto}</td>
-              <td><input type="text" value="${inventario.cantidad}" id="${inventario.id_producto}" name="${inventario.id_producto}" class="form-control"></td>
-            </tr>
-          `;
+              <tr>
+                <td>${i + 1}</td>
+                <td>${inventario.nombre_producto}</td>
+                <td><input type="number" value="${inputValue}" id="${inventario.id_producto}" name="${inventario.id_producto}" class="form-control"></td>
+              </tr>
+            `;
             tablaHtmlInventario += fila;
           }
         }
         jsTablaInventario.innerHTML = tablaHtmlInventario;
         currentPageElem.textContent = currentPage;
       }
-
       // Función para actualizar los índices de inicio y fin de la página actual
       function updateIndexes() {
         startIndex = (currentPage - 1) * rowsPerPage;
@@ -198,6 +200,34 @@ function cargarTablaInventario() {
           showRows();
         }
       });
+
+      jsTablaInventario.addEventListener("input", function (event) {
+        if (event.target.tagName === "INPUT") {
+          var productId = event.target.id;
+          var productValue = event.target.value;
+          inputValues[productId] = productValue;
+        }
+      });
+
+      if(jsBotonGuardarInventario){
+        jsBotonGuardarInventario.addEventListener("click", function () {
+          opcion = "ActualizarInventario";
+          let inventario_productos_json = JSON.stringify(inputValues);
+          var data = "opcion=" + opcion + "&inventario_productos=" + inventario_productos_json;
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "app/controlador/CenaControlador.php", true);
+          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              if (xhr.response == 1) {
+                alert("h");
+              }
+            }
+          };
+          xhr.send(data);
+        });
+      }
+
 
       jsBotonBuscarInventario.addEventListener("click", function () {
         var searchTerm = jsBuscarInventario.value.trim().toLowerCase(); // Obtener término de búsqueda y eliminar espacios en blanco
@@ -1868,9 +1898,4 @@ if (btnLimpiar) {
   });
 }
 
-if(jsBotonGuardarInventario){
-  jsBotonGuardarInventario.addEventListener("click", function () {
-
-  });
-}
 
