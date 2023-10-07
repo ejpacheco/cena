@@ -27,7 +27,7 @@ class CenaModelo
 
       static public function ListarProductos()
       {
-            $x = Conexion::conectar()->prepare("SELECT P.tbl_productos_id as id_producto, P.tbl_productos_nombre as nombre_producto, P.tbl_productos_precio as producto_precio FROM tbl_productos as P ORDER BY P.tbl_productos_nombre");
+            $x = Conexion::conectar()->prepare("SELECT P.tbl_productos_id as id_producto, P.tbl_productos_nombre as nombre_producto, P.tbl_productos_precio as producto_precio, P.tbl_producto_cantidad as cantidad FROM tbl_productos as P ORDER BY P.tbl_productos_nombre");
             $x->execute();
 
             return $x->fetchAll(PDO::FETCH_ASSOC);
@@ -208,5 +208,24 @@ class CenaModelo
                   $x->execute();
             }
             return true;
+      }
+
+      static public function ConsultarInformeGeneral($fecha)
+      {
+            $x = Conexion::conectar()->prepare("SELECT SUM(tbl_total) AS suma_total, SUM(tbl_abono) as suma_abono, SUM(tbl_saldo_pendiente) as suma_saldo_pendiente, SUM(tbl_cambio) as suma_cambio
+            FROM tbl_factura as F  WHERE DATE(F.tbl_fecha_creacion) =:fecha");
+            $x->bindParam(":fecha", $fecha, PDO::PARAM_STR);
+            $x->execute();
+
+            $y = Conexion::conectar()->prepare("SELECT SUM(A.tbl_valor_abono) as suma_abono FROM tbl_abonos as A WHERE DATE(A.tbl_fecha_abono) =:fecha");
+            $y->bindParam(":fecha", $fecha, PDO::PARAM_STR);
+            $y->execute();
+
+            $Informe=[
+              "factura"=>$x->fetch(PDO::FETCH_ASSOC),
+              "abono" =>$y->fetch(PDO::FETCH_ASSOC),
+            ];
+
+            return $Informe;
       }
 }

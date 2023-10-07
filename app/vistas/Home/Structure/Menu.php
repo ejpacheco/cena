@@ -50,6 +50,12 @@
                         <span>Inventario</span>
                     </a>
                 </li>
+                <li class="sidebar-item ">
+                    <a href="informe" class='sidebar-link'>
+                    <i class="bi bi-bar-chart-line"></i>
+                        <span>Informes</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>

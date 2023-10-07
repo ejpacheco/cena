@@ -62,6 +62,8 @@ session_start();
          include "app/vistas/Home/Factura/RegistrarFacturaCena.php";
       elseif (isset($_GET["ruta"]) && $_GET["ruta"] == "inventario") :
          include "app/vistas/Home/Inventario/Inventario.php";
+      elseif (isset($_GET["ruta"]) && $_GET["ruta"] == "informe") :
+         include "app/vistas/Home/Informe/Informe.php";
       elseif (isset($_GET["ruta"]) && $_GET["ruta"] == "logout") :
          include "app/vistas/Login/logout.php";
       else :
@@ -71,7 +73,7 @@ session_start();
 
       require_once "app/controlador/LoginControlador.php";
       include "app/vistas/Login/login.php";
-   } else {
+   } elseif (empty($_GET["ruta"])){
       header("Location: index");
       exit;
    }

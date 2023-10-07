@@ -31,6 +31,7 @@
                                                             <th>CANTIDAD</th>
                                                             <th>PRECIO UNITARIO</th>
                                                             <th>TOTAL</th>
+                                                            <th>CANTIDAD</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="TablaFacturaCena">

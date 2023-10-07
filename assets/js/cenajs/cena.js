@@ -1,3 +1,14 @@
+
+function obtenerFechaActual() {
+  const fecha = new Date();
+  const anio = fecha.getFullYear();
+  const mes = String(fecha.getMonth() + 1).padStart(2, "0"); // Los meses se indexan desde 0, así que sumamos 1 y formateamos con dos dígitos.
+  const dia = String(fecha.getDate()).padStart(2, "0"); // Formateamos el día con dos dígitos.
+
+  return `${anio}-${mes}-${dia}`;
+}
+
+
 //se obtiene varibale por url
 const urlParams = new URLSearchParams(window.location.search);
 const id_facturaG = urlParams.get('id_factura');
@@ -12,6 +23,8 @@ var jsFormResgistrar_Form_Abono=document.getElementById("Resgistrar_Form_Abono")
 
 // campos
 var jsProducto = document.querySelector("#producto");
+var jsAbonoFechaActual= document.querySelector("#AbonoFechaActual");
+var jsFechaInformeGeneral = document.querySelector("#FechaDeInforme");
 var jsProducto_precio = document.querySelector("#producto_precio");
 var jsEditarProducto = document.querySelector("#EditarProducto");
 var jsEditarProducto_precio = document.querySelector("#EditarProductoPrecio");
@@ -33,6 +46,9 @@ var jsRecibidoFactura = document.querySelector("#RecibidoFactura");
 var jsAdevolverFactura = document.querySelector("#AdevolverFactura");
 var jsAbonoFactura = document.querySelector("#AbonoFactura");
 var jsListadoClientesFactura = document.querySelector("#ListadoClientesFactura");
+var jsListadoClientesHistorialFactura = document.querySelector("#ListadoClientesHistorialFactura");
+var jsEstadoFactura = document.querySelector("#EstadoFactura");
+var jsFechaFacturaHistorial = document.querySelector("#FechaFacturaHistorial");
 var jsNombreClienteFactura = document.querySelector("#nombre_cliente_factura");
 var jsFechaFactura = document.querySelector("#fecha_factura");
 var jsVertotal_factura = document.querySelector("#total_factura");
@@ -53,6 +69,8 @@ var SaldoPendienteFacturaCena= document.querySelector("#SaldoPendienteFacturaCen
 
 // tablas
 var jsTablaProducto = document.querySelector("#TablaProductos");
+var jsTablaInformeGeneral= document.querySelector("#TablaInformeGeneral");
+var jsTablaInformeGeneralPorFecha= document.querySelector("#TablaInformeGeneralPorFecha");
 var jsTablaCliente = document.querySelector("#TablaClientes");
 var jsTablaFactura = document.querySelector("#TablaFactura");
 var jsllenarTablaVerFactura = document.querySelector("#LLenar_Productos_Factura");
@@ -92,6 +110,8 @@ if (modalRegistrarAbono) {
 
 // botones
 var jsBotonBuscarProducto = document.querySelector(".btnBuscarProducto");
+var jsBotonLimpiarInventario = document.querySelector(".btnLimpiarInventario");
+var jsBotonBuscarInformeGeneral = document.querySelector(".btnBuscarInformeGeneral");
 var jsBotonBuscarInventario = document.querySelector(".btnBuscarInventario");
 var jsBotonBuscarCliente = document.querySelector(".btnBuscarCliente");
 var jsbtnAgregarAFactura = document.querySelector(".btnAgregarAFactura");
@@ -100,6 +120,7 @@ var jsBotonBuscarFactura = document.querySelector(".btnBuscarFactura");
 var BtnCalcularFacturaCena = document.querySelector(".btnCalcular");
 var btnRegistrarFacturaCena = document.querySelector(".btnRegistrarFacturaCena");
 var btnLimpiar = document.querySelector(".btnLimpiar");
+var btnLimpiarHistorialFactura = document.querySelector(".btnLimpiarHistorialFactura");
 var jsBotonGuardarInventario = document.querySelector(".btnGuardarInventario");
 var opcion = "";
 
@@ -208,9 +229,10 @@ function cargarTablaInventario() {
           inputValues[productId] = productValue;
         }
       });
-
+      console.log(inputValues);
       if(jsBotonGuardarInventario){
         jsBotonGuardarInventario.addEventListener("click", function () {
+          console.log(inputValues);
           opcion = "ActualizarInventario";
           let inventario_productos_json = JSON.stringify(inputValues);
           var data = "opcion=" + opcion + "&inventario_productos=" + inventario_productos_json;
@@ -220,7 +242,13 @@ function cargarTablaInventario() {
           xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
               if (xhr.response == 1) {
-                alert("h");
+                Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: "Datos Guardados",
+                  showConfirmButton: false,
+                  timer: 1000,
+                });
               }
             }
           };
@@ -1138,7 +1166,7 @@ if(jsAbonoFactura)
 }
 
 //funcion para cargar el select de los clientes en la modal de facturas
-function cargarSelectClientes() {
+function cargarSelectClientes(select) {
   opcion = "ListarCliente";
   var data = "opcion=" + opcion;
   var xhr = new XMLHttpRequest();
@@ -1148,11 +1176,16 @@ function cargarSelectClientes() {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       var listadoCliente = JSON.parse(this.responseText);
-      var options = "<option value='null'> --seleccione--</option>";
+      var options = "<option value='null'> CLIENTE</option>";
       for (var i = 0; i < listadoCliente.length; i++) {
         options += "<option value='" + listadoCliente[i].id_cliente+ "'>" + listadoCliente[i].nombre_cliente + "</option>";
       }
-      jsListadoClientesFactura.innerHTML = options;
+      if(select==1) {
+        jsListadoClientesFactura.innerHTML = options;
+      }
+      else if(select==2){
+        jsListadoClientesHistorialFactura.innerHTML = options;
+      }
     } else if (xhr.readyState === 4 && xhr.status !== 200) {
       alert(
         "Error en la solicitud: " +
@@ -1168,8 +1201,11 @@ function cargarSelectClientes() {
 }
 
 //funcion para cargar el select de los clientes en la modal de facturas
-if (jsListadoClientesFactura) {
-  document.addEventListener("DOMContentLoaded", cargarSelectClientes);
+if (jsListadoClientesFactura ) {
+  document.addEventListener("DOMContentLoaded", cargarSelectClientes(1));
+}
+else if(jsListadoClientesHistorialFactura){
+  document.addEventListener("DOMContentLoaded", cargarSelectClientes(2));
 }
 
 //funcion para guaradar la factura y redirigir a ver factura
@@ -1386,7 +1422,7 @@ function cargarTablaHistorialFactura() {
       var prevBtn = document.getElementById("prev-page");
       var nextBtn = document.getElementById("next-page");
       var currentPageElem = document.getElementById("current-page");
-     var estadoF="";
+      var estadoF="";
       // Función para mostrar las filas correspondientes a la página actual
       function showRows() {
         tablaHtmlHFactura = "";
@@ -1410,11 +1446,12 @@ function cargarTablaHistorialFactura() {
               <td>${parseFloat(facturaData.abono).toLocaleString()}</td>
               <td>${parseFloat(facturaData.saldo_pendiente).toLocaleString()}</td>
               <td>${facturaData.fecha_creacion}</td>
+              <td>ELQUIS PACHECO</td>
               <td><button class="btn btn-secondary btnRegistrarAbono" data-bs-toggle="modal" data-bs-target="#ModalRegistrarAbono" data-id="${
                 facturaData.id_factura
               }"><i class="bi bi-pencil btniRegistrarAbono" data-id="${
                 facturaData.id_factura
-            }"></i></button>&nbsp;&nbsp;<button class="btn btn-success btnVerFactura" data-id="${
+            }"></i></button>&nbsp;&nbsp;<br><button class="btn btn-success btnVerFactura" data-id="${
               facturaData.id_factura
             }"><i class="bi bi-eye btniVerFactura" data-id="${
               facturaData.id_factura
@@ -1423,6 +1460,7 @@ function cargarTablaHistorialFactura() {
             }"><i class="bi bi-trash btnEliminarFactura" data-id="${
               facturaData.id_factura
             }"></i></button></td>
+
             </tr>
           `;
             tablaHtmlHFactura += fila;
@@ -1462,14 +1500,59 @@ function cargarTablaHistorialFactura() {
       });
 
       jsBotonBuscarFactura.addEventListener("click", function () {
-        var searchTerm = jsBuscarFactura.value.trim().toLowerCase(); // Obtener término de búsqueda y eliminar espacios en blanco
-        if (searchTerm !== "") {
-          // Filtrar los datos de la tabla por el término de búsqueda
+        var selectedOptionCliente = jsListadoClientesHistorialFactura.options[jsListadoClientesHistorialFactura.selectedIndex].text;
+        var selectedOptionEstado = jsEstadoFactura.value;
+        var fechaHistorialFactura = jsFechaFacturaHistorial.value;
+         console.log(selectedOptionCliente);
+         console.log(fechaHistorialFactura);
+         console.log(selectedOptionEstado);
+        if (jsListadoClientesHistorialFactura.value !=="null" || selectedOptionEstado !=="null" || fechaHistorialFactura ) {
+          Swal.fire({
+            title: 'Cargando....',
+            timer: 500,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading()
+            },
+          })
           var filteredData = listadoFactura.filter(function (factura) {
-            return (
-              factura.nombre_cliente.toLowerCase().includes(searchTerm) ||
-              factura.fecha_creacion.toLowerCase().includes(searchTerm) || factura.estado.toLowerCase().includes(searchTerm)
-            );
+            var fechaFacturaSinHora = factura.fecha_creacion.split(" - ")[0];
+
+            if(jsListadoClientesHistorialFactura.value !=="null" && selectedOptionEstado !=="null" && fechaHistorialFactura ){
+              return (
+                factura.nombre_cliente === selectedOptionCliente && factura.estado == selectedOptionEstado && fechaFacturaSinHora === fechaHistorialFactura
+              );
+            }
+            else if(jsListadoClientesHistorialFactura.value !=="null" && selectedOptionEstado !=="null"){
+              return (
+                factura.nombre_cliente === selectedOptionCliente && factura.estado == selectedOptionEstado
+              );
+            }
+            else if(jsListadoClientesHistorialFactura.value !=="null" && fechaHistorialFactura ){
+              return (
+                factura.nombre_cliente === selectedOptionCliente && fechaFacturaSinHora === fechaHistorialFactura
+              );
+            }
+            else if(selectedOptionEstado !=="null" && fechaHistorialFactura ){
+              return (
+                factura.estado == selectedOptionEstado && fechaFacturaSinHora === fechaHistorialFactura
+              );
+            }
+            else if(jsListadoClientesHistorialFactura.value !=="null"){
+              return (
+                factura.nombre_cliente === selectedOptionCliente
+              );
+            }
+            else if(selectedOptionEstado !=="null"){
+              return (
+                factura.estado == selectedOptionEstado
+              );
+            }
+            else if(fechaHistorialFactura){
+              return (
+                fechaFacturaSinHora === fechaHistorialFactura
+              );
+            }
           });
           currentPage = 1;
           totalPages = Math.ceil(filteredData.length / rowsPerPage);
@@ -1668,7 +1751,6 @@ function cargarTablaFacturaCena() {
     if (xhr.readyState === 4 && xhr.status === 200) {
       var listadoProducto = JSON.parse(this.responseText);
       var conta = 0;
-
       for (var i = 0; i < listadoProducto.length; i++) {
         var producto = listadoProducto[i];
         var conta = 0;
@@ -1719,6 +1801,9 @@ function cargarTablaFacturaCena() {
         inputTotal.value = 0;
         inputTotal.disabled=true;
         celdaTotal.appendChild(inputTotal);
+
+        var celdaCantidadProducto = nuevaFila.insertCell(-1);
+        celdaCantidadProducto.textContent = producto.cantidad;
 
         inputCantidad.addEventListener("change", (function(cantidad, precio, inputTotal) {
           return function() {
@@ -1898,4 +1983,171 @@ if (btnLimpiar) {
   });
 }
 
+if (btnLimpiarHistorialFactura) {
+  btnLimpiarHistorialFactura.addEventListener("click", function () {
+    Swal.fire({
+      title: 'Limpiando....',
+      timer: 500,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading()
+      },
+    })
+    cargarTablaHistorialFactura();
+  });
+}
 
+function consultarInformeGeneral() {
+
+  opcion = "ConsultarInformeGeneral";
+  const fechaInforme = obtenerFechaActual();
+
+    var data = "opcion=" + opcion + "&fechaInforme="+ fechaInforme;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "app/controlador/CenaControlador.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var consultaInforme = JSON.parse(this.responseText);
+          function formatearNumero(numero) {
+            return numero.toLocaleString("es-ES", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            });
+          }
+          var AbonosAnteriores=0;
+            if(parseFloat(consultaInforme.abono.suma_abono)>parseFloat(consultaInforme.factura.suma_abono)){
+               AbonosAnteriores=parseFloat(consultaInforme.abono.suma_abono)-parseFloat(consultaInforme.factura.suma_abono);
+            }
+
+            var totalInformeGeneral=(parseFloat(consultaInforme.factura.suma_total)-parseFloat(consultaInforme.factura.suma_saldo_pendiente))+parseFloat(AbonosAnteriores);
+            var tablaHtmlInforme = `
+              <tr>
+              <td>${formatearNumero(consultaInforme.factura.suma_total)}</td>
+              <td>${formatearNumero(consultaInforme.factura.suma_abono)}</td>
+              <td>${formatearNumero(AbonosAnteriores)}</td>
+              <td>${formatearNumero(consultaInforme.factura.suma_saldo_pendiente)}</td>
+              <td>${formatearNumero(consultaInforme.factura.suma_cambio)}</td>
+              <td>${formatearNumero(totalInformeGeneral)}</td>
+              </tr>
+            `;
+        jsTablaInformeGeneral.innerHTML = tablaHtmlInforme;
+      } else if (xhr.readyState === 4 && xhr.status !== 200) {
+        alert(
+          "Error en la solicitud: " +
+            xhr.status +
+            " " +
+            xhr.statusText +
+            " " +
+            xhr.response
+        );
+      }
+    };
+    xhr.send(data);
+
+}
+
+
+function consultarInformeGeneralPorFecha() {
+
+  opcion = "ConsultarInformeGeneral";
+  var fechaInforme = jsFechaInformeGeneral.value;
+  jsAbonoFechaActual.innerHTML= "ABONOS ("+fechaInforme+")";
+
+  if(!fechaInforme){
+    Swal.fire({
+      icon: "warning",
+      title: "Debe ingresar una fecha",
+      showConfirmButton: false,
+      timer: 800,
+    });
+    return;
+  }
+
+    var data = "opcion=" + opcion + "&fechaInforme="+ fechaInforme;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "app/controlador/CenaControlador.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var consultaInforme = JSON.parse(this.responseText);
+          function formatearNumero(numero) {
+            return numero.toLocaleString("es-ES", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            });
+          }
+          if (
+            consultaInforme.factura.suma_abono === null ||
+            consultaInforme.factura.suma_cambio === null ||
+            consultaInforme.factura.suma_saldo_pendiente === null ||
+            consultaInforme.factura.suma_total === null
+          ) {
+            Swal.fire({
+              icon: "warning",
+              title: "Sin resultados...",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            jsTablaInformeGeneralPorFecha.innerHTML = "";
+          }else{
+            Swal.fire({
+              title: 'Cargando...',
+              timer: 500,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading()
+              },
+            })
+          }
+
+          var AbonosAnteriores=0;
+            if(parseFloat(consultaInforme.abono.suma_abono)>parseFloat(consultaInforme.factura.suma_abono)){
+               AbonosAnteriores=parseFloat(consultaInforme.abono.suma_abono)-parseFloat(consultaInforme.factura.suma_abono);
+            }
+
+            var totalInformeGeneral=(parseFloat(consultaInforme.factura.suma_total)-parseFloat(consultaInforme.factura.suma_saldo_pendiente))+parseFloat(AbonosAnteriores);
+            var tablaHtmlInforme = `
+              <tr>
+              <td>${formatearNumero(consultaInforme.factura.suma_total)}</td>
+              <td>${formatearNumero(consultaInforme.factura.suma_abono)}</td>
+              <td>${formatearNumero(AbonosAnteriores)}</td>
+              <td>${formatearNumero(consultaInforme.factura.suma_saldo_pendiente)}</td>
+              <td>${formatearNumero(consultaInforme.factura.suma_cambio)}</td>
+              <td>${formatearNumero(totalInformeGeneral)}</td>
+              </tr>
+            `;
+        jsTablaInformeGeneralPorFecha.innerHTML = tablaHtmlInforme;
+      } else if (xhr.readyState === 4 && xhr.status !== 200) {
+        alert(
+          "Error en la solicitud: " +
+            xhr.status +
+            " " +
+            xhr.statusText +
+            " " +
+            xhr.response
+        );
+      }
+    };
+    xhr.send(data);
+
+}
+
+if (jsBotonBuscarInformeGeneral) {
+  jsBotonBuscarInformeGeneral.addEventListener("click", function () {
+    consultarInformeGeneralPorFecha();
+  });
+}
+
+if (jsTablaInformeGeneral) {
+  document.addEventListener("DOMContentLoaded", consultarInformeGeneral);
+}
+
+if (jsBotonLimpiarInventario) {
+  jsBotonLimpiarInventario.addEventListener("click", function () {
+    jsBuscarInventario.value="";
+    cargarTablaInventario();
+  });
+}

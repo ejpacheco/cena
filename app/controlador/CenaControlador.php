@@ -82,11 +82,17 @@ class CenaControlador
         $respuesta = CenaModelo::ActualizarInventario($datos);
         return $respuesta;
     }
+    public function ConsultarInformeGeneral($datos)
+    {
+        $respuesta = CenaModelo::ConsultarInformeGeneral($datos);
+        return $respuesta;
+    }
 }
 
 if (isset($_POST["opcion"])) {
     date_default_timezone_set('America/Bogota');
     $producto = (isset($_POST["producto"])) ? $_POST['producto'] : null;
+    $fechaInforme = (isset($_POST["fechaInforme"])) ? $_POST['fechaInforme'] : null;
     $producto_precio = (isset($_POST["producto_precio"])) ? $_POST['producto_precio'] : null;
     $editar_producto = (isset($_POST["editar_producto"])) ? $_POST['editar_producto'] : null;
     $id_producto = (isset($_POST["id_producto"])) ? $_POST['id_producto'] : null;
@@ -232,5 +238,10 @@ if (isset($_POST["opcion"])) {
         } else {
             echo 2;
         }
+    elseif ($_POST["opcion"] == "ConsultarInformeGeneral") :
+        $respuesta = new CenaControlador();
+        $respuesta = $respuesta->ConsultarInformeGeneral($fechaInforme);
+        echo json_encode($respuesta, JSON_UNESCAPED_UNICODE);
+
     endif;
 }

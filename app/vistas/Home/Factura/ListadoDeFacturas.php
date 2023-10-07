@@ -14,16 +14,28 @@
                                 <div class="card-content">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control" id="BuscarFactura" placeholder="Buscar...">
+                                            <div class="col-sm-3">
+                                                <select class="form-select" id="ListadoClientesHistorialFactura">
+                                                </select>
                                             </div>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-3">
+                                                <select class="form-select" id="EstadoFactura">
+                                                    <option value="null">ESTADO</option>
+                                                    <option value="PAGADO">PAGADO</option>
+                                                    <option value="PENDIENTE">PENDIENTE</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="date" class="form-control" id="FechaFacturaHistorial">
+                                            </div>
+                                            <div class="col-sm-3">
                                                 <button type="button" class="btn btn-primary btnBuscarFactura">Buscar</button>
+                                                <button type="button" class="btn btn-secondary btnLimpiarHistorialFactura">Limpiar</button>
                                             </div>
                                         </div>
                                         <div class="table-responsive">
 
-                                            <table class="table table-lg">
+                                            <table class="table">
                                                 <thead>
                                                     <tr>
                                                         <th>N°</th>
@@ -33,6 +45,7 @@
                                                         <th>ABONO</th>
                                                         <th>SALDO PENDIENTE</th>
                                                         <th>FECHA Y HORA</th>
+                                                        <th>USUARIO</th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
