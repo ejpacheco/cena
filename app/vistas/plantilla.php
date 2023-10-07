@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 'On');
 session_start();
 ?>
 
@@ -45,7 +47,35 @@ session_start();
       include "app/vistas/Home/Factura/VerFactura.php";
    endif;
 
-   if (isset($_SESSION["sesion_active"]) && isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura") {
+   if (isset($_GET["ruta"]) && $_GET["ruta"] == "prueba") :
+
+      require_once './app/modelo/conexion.php';
+      $fecha = "2023-10-07";
+      $x = Conexion::conectar()->prepare("SELECT p.tbl_productos_id AS id_producto FROM tbl_productos AS p");
+      $x->execute();
+      $productos = $x->fetchAll(PDO::FETCH_ASSOC);
+
+      foreach ($productos as $producto) {
+
+         $y = Conexion::conectar()->prepare("SELECT FP.tbl_id_producto as id_producto, P.tbl_productos_nombre as nombre_producto, SUM(FP.tbl_cantidad) as cantidad, F.tbl_fecha_creacion as fecha
+         FROM tbl_factura_productos as FP INNER JOIN tbl_factura as F ON FP.tbl_id_factura = F.tbl_id_factura INNER JOIN tbl_productos as P on FP.tbl_id_producto = P.tbl_productos_id
+         WHERE FP.tbl_id_producto =:id_producto  AND DATE(F.tbl_fecha_creacion) = :fecha");
+         $y->bindParam(":id_producto", $producto["id_producto"], PDO::PARAM_INT);
+         $y->bindParam(":fecha", $fecha, PDO::PARAM_STR);
+         $y->execute();
+         $resultados = $y->fetchAll(PDO::FETCH_ASSOC);
+         foreach ($resultados as $resultado) {
+            if ($resultado["cantidad"]){
+               echo $resultado["nombre_producto"]." - ". $resultado["cantidad"];
+               echo "<br>";
+            }
+
+         }
+      }
+
+   endif;
+
+   if (isset($_SESSION["sesion_active"]) && isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura" && $_GET["ruta"] != "prueba") {
       include "app/vistas/Home/Structure/Header.php";
       include "app/vistas/Home/Structure/Menu.php";
       if (isset($_GET["ruta"]) && $_GET["ruta"] == "index") :
@@ -69,18 +99,17 @@ session_start();
       else :
          include "app/vistas/Home/Dashboard.php";
       endif;
-   } elseif (isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura") {
-
+   } elseif (isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura"  && $_GET["ruta"] != "prueba") {
       require_once "app/controlador/LoginControlador.php";
       include "app/vistas/Login/login.php";
-   } elseif (empty($_GET["ruta"])){
+   } elseif (empty($_GET["ruta"])) {
       header("Location: index");
       exit;
    }
    ?>
 
    <?php
-   if (isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura") :
+   if (isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura"  && $_GET["ruta"] != "prueba") :
    ?>
 
       <script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>

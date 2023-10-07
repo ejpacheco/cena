@@ -221,11 +221,39 @@ class CenaModelo
             $y->bindParam(":fecha", $fecha, PDO::PARAM_STR);
             $y->execute();
 
-            $Informe=[
-              "factura"=>$x->fetch(PDO::FETCH_ASSOC),
-              "abono" =>$y->fetch(PDO::FETCH_ASSOC),
+            $Informe = [
+                  "factura" => $x->fetch(PDO::FETCH_ASSOC),
+                  "abono" => $y->fetch(PDO::FETCH_ASSOC),
             ];
 
             return $Informe;
+      }
+
+
+      static public function ConsultarInformeDeProductos($fecha)
+      {
+            $x = Conexion::conectar()->prepare("SELECT p.tbl_productos_id AS id_producto FROM tbl_productos AS p");
+            $x->execute();
+            $productos = $x->fetchAll(PDO::FETCH_ASSOC);
+            $respuestaF=[];
+            foreach ($productos as $producto) {
+               $y = Conexion::conectar()->prepare("SELECT FP.tbl_id_producto as id_producto, P.tbl_productos_nombre as nombre_producto, SUM(FP.tbl_cantidad) as cantidad, F.tbl_fecha_creacion as fecha
+               FROM tbl_factura_productos as FP INNER JOIN tbl_factura as F ON FP.tbl_id_factura = F.tbl_id_factura INNER JOIN tbl_productos as P on FP.tbl_id_producto = P.tbl_productos_id
+               WHERE FP.tbl_id_producto =:id_producto  AND DATE(F.tbl_fecha_creacion) = :fecha");
+               $y->bindParam(":id_producto", $producto["id_producto"], PDO::PARAM_INT);
+               $y->bindParam(":fecha", $fecha, PDO::PARAM_STR);
+               $y->execute();
+               $resultados = $y->fetchAll(PDO::FETCH_ASSOC);
+               foreach ($resultados as $resultado) {
+                  if ($resultado["cantidad"]){
+                     $respuesta=[
+                        "nombre_producto" => $resultado["nombre_producto"],
+                        "cantidad" => $resultado["cantidad"],
+                     ];
+                     $respuestaF[]=$respuesta;
+                  }
+               }
+            }
+            return $respuestaF;
       }
 }

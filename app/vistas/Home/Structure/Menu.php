@@ -1,6 +1,14 @@
 <div id="sidebar" class="active">
     <div class="sidebar-wrapper active">
 
+        <div class="sidebar-header">
+            <div class="d-flex justify-content-between">
+                <div class="toggler">
+                    <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                </div>
+            </div>
+        </div>
+
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Menu</li>
@@ -46,13 +54,13 @@
                 </li>
                 <li class="sidebar-item ">
                     <a href="inventario" class='sidebar-link'>
-                    <i class="bi bi-handbag-fill"></i>
+                        <i class="bi bi-handbag-fill"></i>
                         <span>Inventario</span>
                     </a>
                 </li>
                 <li class="sidebar-item ">
                     <a href="informe" class='sidebar-link'>
-                    <i class="bi bi-bar-chart-line"></i>
+                        <i class="bi bi-bar-chart-line"></i>
                         <span>Informes</span>
                     </a>
                 </li>

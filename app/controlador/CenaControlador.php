@@ -87,6 +87,12 @@ class CenaControlador
         $respuesta = CenaModelo::ConsultarInformeGeneral($datos);
         return $respuesta;
     }
+
+    public function ConsultarInformeDeProductos($datos)
+    {
+        $respuesta = CenaModelo::ConsultarInformeDeProductos($datos);
+        return $respuesta;
+    }
 }
 
 if (isset($_POST["opcion"])) {
@@ -241,6 +247,10 @@ if (isset($_POST["opcion"])) {
     elseif ($_POST["opcion"] == "ConsultarInformeGeneral") :
         $respuesta = new CenaControlador();
         $respuesta = $respuesta->ConsultarInformeGeneral($fechaInforme);
+        echo json_encode($respuesta, JSON_UNESCAPED_UNICODE);
+    elseif ($_POST["opcion"] == "ConsultarInformeDeProductos") :
+        $respuesta = new CenaControlador();
+        $respuesta = $respuesta->ConsultarInformeDeProductos($fechaInforme);
         echo json_encode($respuesta, JSON_UNESCAPED_UNICODE);
 
     endif;

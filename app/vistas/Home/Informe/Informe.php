@@ -56,13 +56,13 @@ $fechaActual = date("Y-m-d");
                                             </div>
                                         </div>
                                         <div class="table-responsive">
-
+                                            <br>
                                             <table class="table">
                                                 <thead>
                                                     <tr>
                                                         <th>TOTAL VENTA</th>
                                                         <th id="AbonoFechaActual">ABONOS (Facturas Hoy)</th>
-                                                        <th >ABONOS (Facturas Anteriores)</th>
+                                                        <th>ABONOS (Facturas Anteriores)</th>
                                                         <th style="color:red;">SALDO PENDIENTE</th>
                                                         <th>CAMBIO</th>
                                                         <th>TOTAL</th>
@@ -72,7 +72,84 @@ $fechaActual = date("Y-m-d");
                                                 </tbody>
                                             </table>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="row" id="basic-table">
+                        <div class="col-12 col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">INFORME POR PERIODOS</h4>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <label for="">Fecha Inicial</label>
+                                                <input type="date" class="form-control" id="FechaInicialInformePeriodo">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label for="">Fecha Final</label>
+                                                <input type="date" class="form-control" id="FechaFinalInformePeriodo">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <button type="button" class="btn btn-secondary btnBuscarInformeGeneralPorMes">Buscar</button>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <br>
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>TOTAL VENTA</th>
+                                                        <th style="color:red;">SALDO PENDIENTE</th>
+                                                        <th>CAMBIO</th>
+                                                        <th>TOTAL</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="TablaInformeGeneralPorMes">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="basic-table">
+                        <div class="col-12 col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">INFORME DE VENTAS DE PRODUCTOS</h4>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <input type="date" class="form-control" id="FechaDeInformeProducto">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <button type="button" class="btn btn-secondary btnBuscarInformeProducto">Buscar</button>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <br>
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>PRODUCTO</th>
+                                                        <th>CANTIDAD</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="TablaInformeProducto">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

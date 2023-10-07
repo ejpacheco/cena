@@ -23,6 +23,7 @@ var jsFormResgistrar_Form_Abono=document.getElementById("Resgistrar_Form_Abono")
 
 // campos
 var jsProducto = document.querySelector("#producto");
+var jsFechaDeInformeProducto = document.querySelector("#FechaDeInformeProducto");
 var jsAbonoFechaActual= document.querySelector("#AbonoFechaActual");
 var jsFechaInformeGeneral = document.querySelector("#FechaDeInforme");
 var jsProducto_precio = document.querySelector("#producto_precio");
@@ -69,6 +70,7 @@ var SaldoPendienteFacturaCena= document.querySelector("#SaldoPendienteFacturaCen
 
 // tablas
 var jsTablaProducto = document.querySelector("#TablaProductos");
+var jsTablaInformeProducto = document.querySelector("#TablaInformeProducto");
 var jsTablaInformeGeneral= document.querySelector("#TablaInformeGeneral");
 var jsTablaInformeGeneralPorFecha= document.querySelector("#TablaInformeGeneralPorFecha");
 var jsTablaCliente = document.querySelector("#TablaClientes");
@@ -110,6 +112,7 @@ if (modalRegistrarAbono) {
 
 // botones
 var jsBotonBuscarProducto = document.querySelector(".btnBuscarProducto");
+var jsBotonBuscarInformeProducto = document.querySelector(".btnBuscarInformeProducto");
 var jsBotonLimpiarInventario = document.querySelector(".btnLimpiarInventario");
 var jsBotonBuscarInformeGeneral = document.querySelector(".btnBuscarInformeGeneral");
 var jsBotonBuscarInventario = document.querySelector(".btnBuscarInventario");
@@ -2132,8 +2135,86 @@ function consultarInformeGeneralPorFecha() {
       }
     };
     xhr.send(data);
+}
+
+function consultarInformeDeProductos() {
+
+  opcion = "ConsultarInformeDeProductos";
+  var fechaInforme = jsFechaDeInformeProducto.value;
+  var tablaHtmlInformeProducto="";
+  if(!fechaInforme){
+    Swal.fire({
+      icon: "warning",
+      title: "Debe ingresar una fecha",
+      showConfirmButton: false,
+      timer: 800,
+    });
+    return;
+  }
+
+    var data = "opcion=" + opcion + "&fechaInforme="+ fechaInforme;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "app/controlador/CenaControlador.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var consultaInforme = JSON.parse(this.responseText);
+          if(consultaInforme.length ==0){
+            Swal.fire({
+              icon: "warning",
+              title: "Sin resultados",
+              showConfirmButton: false,
+              timer: 800,
+            });
+            return;
+          }
+          function formatearNumero(numero) {
+            return numero.toLocaleString("es-ES", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            });
+          }
+
+            Swal.fire({
+              title: 'Cargando...',
+              timer: 500,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading()
+              },
+            })
+
+            for (var i = 0; i < consultaInforme.length; i++) {
+              if (consultaInforme[i]) {
+                var cantidad = consultaInforme[i].cantidad;
+                var nombre_producto = consultaInforme[i].nombre_producto;
+                var fila = `
+                  <tr>
+                    <td>${nombre_producto}</td>
+                    <td>${cantidad}</td>
+                  </tr>
+                `;
+                tablaHtmlInformeProducto += fila;
+              }
+            }
+
+        jsTablaInformeProducto.innerHTML = tablaHtmlInformeProducto;
+      } else if (xhr.readyState === 4 && xhr.status !== 200) {
+        alert(
+          "Error en la solicitud: " +
+            xhr.status +
+            " " +
+            xhr.statusText +
+            " " +
+            xhr.response
+        );
+      }
+    };
+    xhr.send(data);
 
 }
+
 
 if (jsBotonBuscarInformeGeneral) {
   jsBotonBuscarInformeGeneral.addEventListener("click", function () {
@@ -2149,5 +2230,11 @@ if (jsBotonLimpiarInventario) {
   jsBotonLimpiarInventario.addEventListener("click", function () {
     jsBuscarInventario.value="";
     cargarTablaInventario();
+  });
+}
+
+if (jsBotonBuscarInformeProducto) {
+  jsBotonBuscarInformeProducto.addEventListener("click", function () {
+     consultarInformeDeProductos();
   });
 }
