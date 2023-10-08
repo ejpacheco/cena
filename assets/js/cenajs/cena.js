@@ -23,6 +23,8 @@ var jsFormResgistrar_Form_Abono=document.getElementById("Resgistrar_Form_Abono")
 
 // campos
 var jsProducto = document.querySelector("#producto");
+var jsFechaInicialInformePeriodo = document.querySelector("#FechaInicialInformePeriodo");
+var jsFechaFinalInformePeriodo = document.querySelector("#FechaFinalInformePeriodo");
 var jsFechaDeInformeProducto = document.querySelector("#FechaDeInformeProducto");
 var jsAbonoFechaActual= document.querySelector("#AbonoFechaActual");
 var jsFechaInformeGeneral = document.querySelector("#FechaDeInforme");
@@ -69,6 +71,8 @@ var SaldoPendienteFacturaCena= document.querySelector("#SaldoPendienteFacturaCen
 
 
 // tablas
+
+var jsTablaInformeGeneralPorMes= document.querySelector("#TablaInformeGeneralPorMes");
 var jsTablaProducto = document.querySelector("#TablaProductos");
 var jsTablaInformeProducto = document.querySelector("#TablaInformeProducto");
 var jsTablaInformeGeneral= document.querySelector("#TablaInformeGeneral");
@@ -111,6 +115,7 @@ if (modalRegistrarAbono) {
 }
 
 // botones
+var jsBotonBuscarInformeGeneralPorMes = document.querySelector(".btnBuscarInformeGeneralPorMes");
 var jsBotonBuscarProducto = document.querySelector(".btnBuscarProducto");
 var jsBotonBuscarInformeProducto = document.querySelector(".btnBuscarInformeProducto");
 var jsBotonLimpiarInventario = document.querySelector(".btnLimpiarInventario");
@@ -2215,6 +2220,96 @@ function consultarInformeDeProductos() {
 
 }
 
+function consultarInformeGeneralPorPeriodos() {
+
+  opcion = "ConsultarInformeGeneralPorPeriodos";
+  var fechaInformeInicialv = new Date(jsFechaInicialInformePeriodo.value);
+  var fechaInformeFinalv = new Date(jsFechaFinalInformePeriodo.value);
+  var fechaInformeInicial = new Date(jsFechaInicialInformePeriodo.value);
+  var fechaInformeFinal = new Date(jsFechaFinalInformePeriodo.value);
+  // Verificar si alguna de las fechas no es válida
+  if (isNaN(fechaInformeInicialv) || isNaN(fechaInformeFinalv)) {
+    Swal.fire({
+      icon: "warning",
+      title: "Las fechas ingresadas no son válidas",
+      showConfirmButton: false,
+      timer: 800,
+    });
+    return;
+  }
+  // Comparar las fechas
+  if (fechaInformeInicialv > fechaInformeFinalv) {
+    Swal.fire({
+      icon: "warning",
+      title: "La fecha inicial no puede ser mayor que la fecha final",
+      showConfirmButton: false,
+      timer: 900,
+    });
+    return;
+  }
+
+    var data = "opcion=" + opcion + "&fechaInforme="+ fechaInformeInicial+ "&fechaInformeFinal="+ fechaInformeFinal;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "app/controlador/CenaControlador.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var consultaInforme = JSON.parse(this.responseText);
+          function formatearNumero(numero) {
+            return numero.toLocaleString("es-ES", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            });
+          }
+          if (
+            consultaInforme.suma_cambio === null ||
+            consultaInforme.suma_saldo_pendiente === null ||
+            consultaInforme.suma_total === null
+          ) {
+            Swal.fire({
+              icon: "warning",
+              title: "Sin resultados...",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            jsTablaInformeGeneralPorFecha.innerHTML = "";
+            return;
+          }
+            Swal.fire({
+              title: 'Cargando...',
+              timer: 500,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading()
+              },
+            })
+
+
+            var totalInformeGeneral=(parseFloat(consultaInforme.suma_total)-parseFloat(consultaInforme.suma_saldo_pendiente));
+            var tablaHtmlInforme = `
+              <tr>
+              <td>${formatearNumero(consultaInforme.suma_total)}</td>
+              <td>${formatearNumero(consultaInforme.suma_saldo_pendiente)}</td>
+              <td>${formatearNumero(consultaInforme.suma_cambio)}</td>
+              <td>${formatearNumero(totalInformeGeneral)}</td>
+              </tr>
+            `;
+        jsTablaInformeGeneralPorMes.innerHTML = tablaHtmlInforme;
+      } else if (xhr.readyState === 4 && xhr.status !== 200) {
+        alert(
+          "Error en la solicitud: " +
+            xhr.status +
+            " " +
+            xhr.statusText +
+            " " +
+            xhr.response
+        );
+      }
+    };
+    xhr.send(data);
+}
+
 
 if (jsBotonBuscarInformeGeneral) {
   jsBotonBuscarInformeGeneral.addEventListener("click", function () {
@@ -2236,5 +2331,11 @@ if (jsBotonLimpiarInventario) {
 if (jsBotonBuscarInformeProducto) {
   jsBotonBuscarInformeProducto.addEventListener("click", function () {
      consultarInformeDeProductos();
+  });
+}
+
+if (jsBotonBuscarInformeGeneralPorMes) {
+  jsBotonBuscarInformeGeneralPorMes.addEventListener("click", function () {
+    consultarInformeGeneralPorPeriodos();
   });
 }

@@ -93,12 +93,18 @@ class CenaControlador
         $respuesta = CenaModelo::ConsultarInformeDeProductos($datos);
         return $respuesta;
     }
+    public function  ConsultarInformeGeneralPorPeriodos($fechaI,$fechaF)
+    {
+        $respuesta = CenaModelo::ConsultarInformeGeneralPorPeriodos($fechaI,$fechaF);
+        return $respuesta;
+    }
 }
 
 if (isset($_POST["opcion"])) {
     date_default_timezone_set('America/Bogota');
     $producto = (isset($_POST["producto"])) ? $_POST['producto'] : null;
     $fechaInforme = (isset($_POST["fechaInforme"])) ? $_POST['fechaInforme'] : null;
+    $fechaInformeFinal=(isset($_POST["fechaInformeFinal"])) ? $_POST['fechaInformeFinal'] : null;
     $producto_precio = (isset($_POST["producto_precio"])) ? $_POST['producto_precio'] : null;
     $editar_producto = (isset($_POST["editar_producto"])) ? $_POST['editar_producto'] : null;
     $id_producto = (isset($_POST["id_producto"])) ? $_POST['id_producto'] : null;
@@ -252,6 +258,9 @@ if (isset($_POST["opcion"])) {
         $respuesta = new CenaControlador();
         $respuesta = $respuesta->ConsultarInformeDeProductos($fechaInforme);
         echo json_encode($respuesta, JSON_UNESCAPED_UNICODE);
-
+    elseif ($_POST["opcion"] == "ConsultarInformeGeneralPorPeriodos") :
+        $respuesta = new CenaControlador();
+        $respuesta = $respuesta->ConsultarInformeGeneralPorPeriodos($fechaInforme,$fechaInformeFinal);
+        echo json_encode($respuesta, JSON_UNESCAPED_UNICODE);
     endif;
 }

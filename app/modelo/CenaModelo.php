@@ -256,4 +256,15 @@ class CenaModelo
             }
             return $respuestaF;
       }
+
+      static public function ConsultarInformeGeneralPorPeriodos($fechaI,$fechaF)
+      {
+            $x = Conexion::conectar()->prepare("SELECT SUM(tbl_total) AS suma_total, SUM(tbl_abono) as suma_abono, SUM(tbl_saldo_pendiente) as suma_saldo_pendiente, SUM(tbl_cambio) as suma_cambio
+            FROM tbl_factura as F  WHERE DATE(F.tbl_fecha_creacion) >= :fechaI and DATE(F.tbl_fecha_creacion) <= :fechaF");
+            $x->bindParam(":fechaI", $fechaI, PDO::PARAM_STR);
+            $x->bindParam(":fechaF", $fechaF, PDO::PARAM_STR);
+            $x->execute();
+
+            return $x->fetch(PDO::FETCH_ASSOC);
+      }
 }
