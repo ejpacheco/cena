@@ -1825,6 +1825,21 @@ function cargarTablaFacturaCena() {
             }
           }
         })(inputCantidad, inputPrecioUnitario, inputTotal));
+
+        inputPrecioUnitario.addEventListener("change", (function(cantidad, precio, inputTotal) {
+          return function() {
+            if (isNaN(cantidad.value) || isNaN(precio.value) || cantidad.value === "" || precio.value === "") {
+              TotalFacturaCena.value=parseFloat(TotalFacturaCena.value)-parseFloat(inputTotal.value);
+              inputTotal.value = 0;
+              this.value=0;
+            } else {
+              var valorCantidad = parseFloat(cantidad.value);
+              var valorPrecio = parseFloat(precio.value);
+              var totalProducto = valorCantidad * valorPrecio;
+              inputTotal.value = totalProducto;
+            }
+          }
+        })(inputCantidad, inputPrecioUnitario, inputTotal));
       }
     } else if (xhr.readyState === 4 && xhr.status !== 200) {
       alert(
@@ -2020,12 +2035,12 @@ function consultarInformeGeneral() {
           if (numero === null || numero === undefined) {
             return ""; // O cualquier otro valor predeterminado que desees
           }
-        
+
           const options = {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           };
-        
+
           return new Intl.NumberFormat("es-ES", options).format(numero);
         }
         if (consultaInforme.factura.suma_total !== null) {
@@ -2090,12 +2105,12 @@ function consultarInformeGeneralPorFecha() {
           if (numero === null || numero === undefined) {
             return ""; // O cualquier otro valor predeterminado que desees
           }
-        
+
           const options = {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           };
-        
+
           return new Intl.NumberFormat("es-ES", options).format(numero);
         }
           if (
@@ -2188,12 +2203,12 @@ function consultarInformeDeProductos() {
             if (numero === null || numero === undefined) {
               return ""; // O cualquier otro valor predeterminado que desees
             }
-          
+
             const options = {
               minimumFractionDigits: 0,
               maximumFractionDigits: 0,
             };
-          
+
             return new Intl.NumberFormat("es-ES", options).format(numero);
           }
 
@@ -2276,12 +2291,12 @@ function consultarInformeGeneralPorPeriodos() {
           if (numero === null || numero === undefined) {
             return ""; // O cualquier otro valor predeterminado que desees
           }
-        
+
           const options = {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           };
-        
+
           return new Intl.NumberFormat("es-ES", options).format(numero);
         }
           if (

@@ -98,7 +98,7 @@ session_start();
    <?php
    endif;
    ?>
-   <script src="assets/js/cenajs/cena.js?v=1"></script>
+   <script src="assets/js/cenajs/cena.js?v=2"></script>
 
 </body>
 
