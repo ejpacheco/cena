@@ -23,6 +23,7 @@ var jsFormResgistrar_Form_Abono=document.getElementById("Resgistrar_Form_Abono")
 
 // campos
 var jsProducto = document.querySelector("#producto");
+var jsCheckPendientePorPagar = document.querySelector("#checkPendientePorPagar");
 var jsFechaInicialInformePeriodo = document.querySelector("#FechaInicialInformePeriodo");
 var jsFechaFinalInformePeriodo = document.querySelector("#FechaFinalInformePeriodo");
 var jsFechaDeInformeProducto = document.querySelector("#FechaDeInformeProducto");
@@ -1215,8 +1216,10 @@ else if(jsListadoClientesHistorialFactura){
   document.addEventListener("DOMContentLoaded", cargarSelectClientes(2));
 }
 
+
 //funcion para guaradar la factura y redirigir a ver factura
 if (jsFormRegistrarFactura) {
+
   jsFormRegistrarFactura.addEventListener("submit", function (event) {
     event.preventDefault();
     opcion = "RegistrarFactura";
@@ -1891,8 +1894,18 @@ if(BtnCalcularFacturaCena)
 
   });
 }
-
+function EstadoDeFactura(TotalAPagar) {
+  if (jsCheckPendientePorPagar.checked) {
+    SaldoPendienteFacturaCena.value = TotalAPagar;
+  } else {
+    SaldoPendienteFacturaCena.value = 0;
+  }
+}
 if (btnRegistrarFacturaCena) {
+  jsCheckPendientePorPagar.addEventListener("change", function () {
+    EstadoDeFactura(TotalFacturaCena.value);
+  });
+
   btnRegistrarFacturaCena.addEventListener("click", function () {
     var tabla = jsTablaFacturaCena;
     var filas = tabla.getElementsByTagName("tr");

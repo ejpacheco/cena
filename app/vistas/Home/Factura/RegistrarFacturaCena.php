@@ -59,6 +59,10 @@
 
                                             <div class="row mt-3">
                                                 <div class="col-md-12 d-flex justify-content-center">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" id="checkPendientePorPagar" >
+                                                        <label class="form-check-label">Pendiente Por Pagar</label>
+                                                    </div>
                                                     <button type="button" class="btn btn-secondary btnCalcular mx-3">CALCULAR</button>
                                                     <button type="button" class="btn btn-primary btnRegistrarFacturaCena mx-3">GUARDAR</button>
                                                 </div>
