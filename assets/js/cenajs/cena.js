@@ -2020,10 +2020,13 @@ function consultarInformeGeneral() {
           if (numero === null || numero === undefined) {
             return ""; // O cualquier otro valor predeterminado que desees
           }
-          return numero.toLocaleString("es-ES", {
+        
+          const options = {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
-          });
+          };
+        
+          return new Intl.NumberFormat("es-ES", options).format(numero);
         }
         if (consultaInforme.factura.suma_total !== null) {
           var AbonosAnteriores=0;
@@ -2087,10 +2090,13 @@ function consultarInformeGeneralPorFecha() {
           if (numero === null || numero === undefined) {
             return ""; // O cualquier otro valor predeterminado que desees
           }
-          return numero.toLocaleString("es-ES", {
+        
+          const options = {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
-          });
+          };
+        
+          return new Intl.NumberFormat("es-ES", options).format(numero);
         }
           if (
             consultaInforme.factura.suma_abono === null ||
@@ -2182,10 +2188,13 @@ function consultarInformeDeProductos() {
             if (numero === null || numero === undefined) {
               return ""; // O cualquier otro valor predeterminado que desees
             }
-            return numero.toLocaleString("es-ES", {
+          
+            const options = {
               minimumFractionDigits: 0,
               maximumFractionDigits: 0,
-            });
+            };
+          
+            return new Intl.NumberFormat("es-ES", options).format(numero);
           }
 
             Swal.fire({
@@ -2267,10 +2276,13 @@ function consultarInformeGeneralPorPeriodos() {
           if (numero === null || numero === undefined) {
             return ""; // O cualquier otro valor predeterminado que desees
           }
-          return numero.toLocaleString("es-ES", {
+        
+          const options = {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
-          });
+          };
+        
+          return new Intl.NumberFormat("es-ES", options).format(numero);
         }
           if (
             consultaInforme.suma_cambio === null ||
