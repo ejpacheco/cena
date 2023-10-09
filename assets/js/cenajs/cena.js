@@ -26,7 +26,6 @@ var jsProducto = document.querySelector("#producto");
 var jsFechaInicialInformePeriodo = document.querySelector("#FechaInicialInformePeriodo");
 var jsFechaFinalInformePeriodo = document.querySelector("#FechaFinalInformePeriodo");
 var jsFechaDeInformeProducto = document.querySelector("#FechaDeInformeProducto");
-var jsAbonoFechaActual= document.querySelector("#AbonoFechaActual");
 var jsFechaInformeGeneral = document.querySelector("#FechaDeInforme");
 var jsProducto_precio = document.querySelector("#producto_precio");
 var jsEditarProducto = document.querySelector("#EditarProducto");
@@ -2018,29 +2017,34 @@ function consultarInformeGeneral() {
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
         var consultaInforme = JSON.parse(this.responseText);
-          function formatearNumero(numero) {
-            return numero.toLocaleString("es-ES", {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 0,
-            });
+        function formatearNumero(numero) {
+          if (numero === null || numero === undefined) {
+            return ""; // O cualquier otro valor predeterminado que desees
           }
+          return numero.toLocaleString("es-ES", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          });
+        }
+        if (consultaInforme.factura.suma_total !== null) {
           var AbonosAnteriores=0;
-            if(parseFloat(consultaInforme.abono.suma_abono)>parseFloat(consultaInforme.factura.suma_abono)){
-               AbonosAnteriores=parseFloat(consultaInforme.abono.suma_abono)-parseFloat(consultaInforme.factura.suma_abono);
-            }
+          if(parseFloat(consultaInforme.abono.suma_abono)>parseFloat(consultaInforme.factura.suma_abono)){
+             AbonosAnteriores=parseFloat(consultaInforme.abono.suma_abono)-parseFloat(consultaInforme.factura.suma_abono);
+          }
 
-            var totalInformeGeneral=(parseFloat(consultaInforme.factura.suma_total)-parseFloat(consultaInforme.factura.suma_saldo_pendiente))+parseFloat(AbonosAnteriores);
-            var tablaHtmlInforme = `
-              <tr>
-              <td>${formatearNumero(consultaInforme.factura.suma_total)}</td>
-              <td>${formatearNumero(consultaInforme.factura.suma_abono)}</td>
-              <td>${formatearNumero(AbonosAnteriores)}</td>
-              <td>${formatearNumero(consultaInforme.factura.suma_saldo_pendiente)}</td>
-              <td>${formatearNumero(consultaInforme.factura.suma_cambio)}</td>
-              <td>${formatearNumero(totalInformeGeneral)}</td>
-              </tr>
-            `;
-        jsTablaInformeGeneral.innerHTML = tablaHtmlInforme;
+          var totalInformeGeneral=(parseFloat(consultaInforme.factura.suma_total)-parseFloat(consultaInforme.factura.suma_saldo_pendiente))+parseFloat(AbonosAnteriores);
+          var tablaHtmlInforme = `
+            <tr>
+            <td>${formatearNumero(consultaInforme.factura.suma_total)}</td>
+            <td>${formatearNumero(AbonosAnteriores)}</td>
+            <td>${formatearNumero(consultaInforme.factura.suma_saldo_pendiente)}</td>
+            <td>${formatearNumero(consultaInforme.factura.suma_cambio)}</td>
+            <td>${formatearNumero(totalInformeGeneral)}</td>
+            </tr>
+          `;
+      jsTablaInformeGeneral.innerHTML = tablaHtmlInforme;
+        }
+
       } else if (xhr.readyState === 4 && xhr.status !== 200) {
         alert(
           "Error en la solicitud: " +
@@ -2061,7 +2065,6 @@ function consultarInformeGeneralPorFecha() {
 
   opcion = "ConsultarInformeGeneral";
   var fechaInforme = jsFechaInformeGeneral.value;
-  jsAbonoFechaActual.innerHTML= "ABONOS ("+fechaInforme+")";
 
   if(!fechaInforme){
     Swal.fire({
@@ -2081,12 +2084,15 @@ function consultarInformeGeneralPorFecha() {
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
         var consultaInforme = JSON.parse(this.responseText);
-          function formatearNumero(numero) {
-            return numero.toLocaleString("es-ES", {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 0,
-            });
+        function formatearNumero(numero) {
+          if (numero === null || numero === undefined) {
+            return ""; // O cualquier otro valor predeterminado que desees
           }
+          return numero.toLocaleString("es-ES", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          });
+        }
           if (
             consultaInforme.factura.suma_abono === null ||
             consultaInforme.factura.suma_cambio === null ||
@@ -2120,7 +2126,6 @@ function consultarInformeGeneralPorFecha() {
             var tablaHtmlInforme = `
               <tr>
               <td>${formatearNumero(consultaInforme.factura.suma_total)}</td>
-              <td>${formatearNumero(consultaInforme.factura.suma_abono)}</td>
               <td>${formatearNumero(AbonosAnteriores)}</td>
               <td>${formatearNumero(consultaInforme.factura.suma_saldo_pendiente)}</td>
               <td>${formatearNumero(consultaInforme.factura.suma_cambio)}</td>
@@ -2175,6 +2180,9 @@ function consultarInformeDeProductos() {
             return;
           }
           function formatearNumero(numero) {
+            if (numero === null || numero === undefined) {
+              return ""; // O cualquier otro valor predeterminado que desees
+            }
             return numero.toLocaleString("es-ES", {
               minimumFractionDigits: 0,
               maximumFractionDigits: 0,
@@ -2225,8 +2233,8 @@ function consultarInformeGeneralPorPeriodos() {
   opcion = "ConsultarInformeGeneralPorPeriodos";
   var fechaInformeInicialv = new Date(jsFechaInicialInformePeriodo.value);
   var fechaInformeFinalv = new Date(jsFechaFinalInformePeriodo.value);
-  var fechaInformeInicial = new Date(jsFechaInicialInformePeriodo.value);
-  var fechaInformeFinal = new Date(jsFechaFinalInformePeriodo.value);
+  var fechaInformeInicial = jsFechaInicialInformePeriodo.value;
+  var fechaInformeFinal = jsFechaFinalInformePeriodo.value;
   // Verificar si alguna de las fechas no es válida
   if (isNaN(fechaInformeInicialv) || isNaN(fechaInformeFinalv)) {
     Swal.fire({
@@ -2256,12 +2264,15 @@ function consultarInformeGeneralPorPeriodos() {
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
         var consultaInforme = JSON.parse(this.responseText);
-          function formatearNumero(numero) {
-            return numero.toLocaleString("es-ES", {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 0,
-            });
+        function formatearNumero(numero) {
+          if (numero === null || numero === undefined) {
+            return ""; // O cualquier otro valor predeterminado que desees
           }
+          return numero.toLocaleString("es-ES", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          });
+        }
           if (
             consultaInforme.suma_cambio === null ||
             consultaInforme.suma_saldo_pendiente === null ||

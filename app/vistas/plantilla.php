@@ -48,31 +48,7 @@ session_start();
    endif;
 
    if (isset($_GET["ruta"]) && $_GET["ruta"] == "prueba") :
-
       require_once './app/modelo/conexion.php';
-      $fecha = "2023-10-07";
-      $x = Conexion::conectar()->prepare("SELECT p.tbl_productos_id AS id_producto FROM tbl_productos AS p");
-      $x->execute();
-      $productos = $x->fetchAll(PDO::FETCH_ASSOC);
-
-      foreach ($productos as $producto) {
-
-         $y = Conexion::conectar()->prepare("SELECT FP.tbl_id_producto as id_producto, P.tbl_productos_nombre as nombre_producto, SUM(FP.tbl_cantidad) as cantidad, F.tbl_fecha_creacion as fecha
-         FROM tbl_factura_productos as FP INNER JOIN tbl_factura as F ON FP.tbl_id_factura = F.tbl_id_factura INNER JOIN tbl_productos as P on FP.tbl_id_producto = P.tbl_productos_id
-         WHERE FP.tbl_id_producto =:id_producto  AND DATE(F.tbl_fecha_creacion) = :fecha");
-         $y->bindParam(":id_producto", $producto["id_producto"], PDO::PARAM_INT);
-         $y->bindParam(":fecha", $fecha, PDO::PARAM_STR);
-         $y->execute();
-         $resultados = $y->fetchAll(PDO::FETCH_ASSOC);
-         foreach ($resultados as $resultado) {
-            if ($resultado["cantidad"]){
-               echo $resultado["nombre_producto"]." - ". $resultado["cantidad"];
-               echo "<br>";
-            }
-
-         }
-      }
-
    endif;
 
    if (isset($_SESSION["sesion_active"]) && isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura" && $_GET["ruta"] != "prueba") {
@@ -90,9 +66,9 @@ session_start();
          include "app/vistas/Home/Factura/ListadoDeFacturas.php";
       elseif (isset($_GET["ruta"]) && $_GET["ruta"] == "RegistrarFacturaCena") :
          include "app/vistas/Home/Factura/RegistrarFacturaCena.php";
-      elseif (isset($_GET["ruta"]) && $_GET["ruta"] == "inventario") :
+      elseif (isset($_GET["ruta"]) && $_GET["ruta"] == "inventario" && $_SESSION["sesion_active"]["tipo"]=="ADMINISTRADOR") :
          include "app/vistas/Home/Inventario/Inventario.php";
-      elseif (isset($_GET["ruta"]) && $_GET["ruta"] == "informe") :
+      elseif (isset($_GET["ruta"]) && $_GET["ruta"] == "informe" && $_SESSION["sesion_active"]["tipo"]=="ADMINISTRADOR") :
          include "app/vistas/Home/Informe/Informe.php";
       elseif (isset($_GET["ruta"]) && $_GET["ruta"] == "logout") :
          include "app/vistas/Login/logout.php";

@@ -22,8 +22,7 @@ $fechaActual = date("Y-m-d");
                                                 <thead>
                                                     <tr>
                                                         <th>TOTAL VENTA</th>
-                                                        <th>ABONOS (Facturas Hoy)</th>
-                                                        <th>ABONOS (Facturas Anteriores)</th>
+                                                        <th>ABONOS</th>
                                                         <th style="color:red;">SALDO PENDIENTE</th>
                                                         <th>CAMBIO</th>
                                                         <th>TOTAL</th>
@@ -61,8 +60,7 @@ $fechaActual = date("Y-m-d");
                                                 <thead>
                                                     <tr>
                                                         <th>TOTAL VENTA</th>
-                                                        <th id="AbonoFechaActual">ABONOS (Facturas Hoy)</th>
-                                                        <th>ABONOS (Facturas Anteriores)</th>
+                                                        <th>ABONOS</th>
                                                         <th style="color:red;">SALDO PENDIENTE</th>
                                                         <th>CAMBIO</th>
                                                         <th>TOTAL</th>

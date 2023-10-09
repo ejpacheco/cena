@@ -26,7 +26,8 @@ class LoginControlador
 						    [
 							   'id_user' => $respuesta["id_user"],
 							   'user' => $respuesta["user"],
-							   'nombre'=>$respuesta["nombre"]
+							   'nombre'=>$respuesta["nombre"],
+                               'tipo' => $respuesta["tipo_usuario"],
 						    ];
 						$_SESSION['sesion_active'] = $datos;
 						echo '<script>
