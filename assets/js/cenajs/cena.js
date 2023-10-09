@@ -1453,7 +1453,6 @@ function cargarTablaHistorialFactura() {
               <td>${parseFloat(facturaData.abono).toLocaleString()}</td>
               <td>${parseFloat(facturaData.saldo_pendiente).toLocaleString()}</td>
               <td>${facturaData.fecha_creacion}</td>
-              <td>ELQUIS PACHECO</td>
               <td><button class="btn btn-secondary btnRegistrarAbono" data-bs-toggle="modal" data-bs-target="#ModalRegistrarAbono" data-id="${
                 facturaData.id_factura
               }"><i class="bi bi-pencil btniRegistrarAbono" data-id="${
@@ -1462,7 +1461,7 @@ function cargarTablaHistorialFactura() {
               facturaData.id_factura
             }"><i class="bi bi-eye btniVerFactura" data-id="${
               facturaData.id_factura
-            }"></i></button>&nbsp;&nbsp;<button class="btn btn-danger btnEliminarFactura" data-id="${
+            }"></i></button>&nbsp;&nbsp;<br><button class="btn btn-danger btnEliminarFactura" data-id="${
               facturaData.id_factura
             }"><i class="bi bi-trash btnEliminarFactura" data-id="${
               facturaData.id_factura

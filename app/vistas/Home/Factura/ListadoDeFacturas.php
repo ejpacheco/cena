@@ -45,7 +45,6 @@
                                                         <th>ABONO</th>
                                                         <th>SALDO PENDIENTE</th>
                                                         <th>FECHA Y HORA</th>
-                                                        <th>USUARIO</th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
