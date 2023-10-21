@@ -2595,9 +2595,9 @@ if(jsLLenar_Informe_Producto_Hoy){
             var fila = `
             <tr>
              <td style="font-size: 12px; text-align: center;">(${cantidad}) -</td>
-              <td style="font-size: 12px; text-align: center;">&nbsp;${nombre_producto} -</td>
-              <td style="font-size: 12px; text-align: center;">&nbsp;(${precio}) -</td>
-              <td style="font-size: 12px; text-align: center;">&nbsp;(${total})</td>
+              <td style="font-size: 12px; text-align: center;">${nombre_producto} -</td>
+              <td style="font-size: 12px; text-align: center;">(${precio}) -</td>
+              <td style="font-size: 12px; text-align: center;">(${total})</td>
             </tr>
           `;
             tablaHtmlInformeProducto += fila;
