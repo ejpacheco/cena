@@ -2455,6 +2455,9 @@ if( jsListadoClientesFactura){
   jsListadoClientesFactura.addEventListener("change", function (event) {
     opcion = "Consultarsaldopendiente";
     let id_cliente = jsListadoClientesFactura.value ;
+    if(id_cliente==1){
+     id_cliente=null;
+    }
     var data = "id_cliente=" + id_cliente + "&opcion=" + opcion;
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "app/controlador/CenaControlador.php", true);
