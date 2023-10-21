@@ -115,6 +115,7 @@ if (isset($_POST["opcion"])) {
     $id_producto = (isset($_POST["id_producto"])) ? $_POST['id_producto'] : null;
     $producto_precio_editado = (isset($_POST["editar_producto_precio"])) ? $_POST['editar_producto_precio'] : null;
     $cliente_nombre = (isset($_POST["cliente_nombre"])) ? $_POST['cliente_nombre'] : null;
+    $bonificacion = (isset($_POST["bonificacion"])) ? $_POST['bonificacion'] : null;
     $cliente_telefono = (isset($_POST["cliente_telefono"])) ? $_POST['cliente_telefono'] : null;
     $cliente_cedula = (isset($_POST["cliente_cedula"])) ? $_POST['cliente_cedula'] : null;
     $cliente_nombre_editado = (isset($_POST["editar_cliente_nombre"])) ? $_POST['editar_cliente_nombre'] : null;
@@ -161,6 +162,7 @@ if (isset($_POST["opcion"])) {
             'estado' => $estado,
             'abono_nuevo' => $abono_nuevo,
             'cambio' => $cambio,
+            'bonificacion' => $bonificacion,
         ];
 
     if ($_POST["opcion"] == "RegistrarProducto") :

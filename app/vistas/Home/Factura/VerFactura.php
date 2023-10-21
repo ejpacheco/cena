@@ -66,6 +66,10 @@
             <th colspan="2">Cambio:&nbsp;</th>
             <td><label id="cambio"></label></td>
         </tr>
+        <tr>
+            <th colspan="2">Bonificacion:&nbsp;</th>
+            <td><label id="bonificacion"></label></td>
+        </tr>
     </tfoot>
 </table>
 <p>...</p>

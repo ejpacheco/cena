@@ -23,6 +23,8 @@ var jsFormRegistrarFactura = document.getElementById("RegistrarFactura");
 var jsFormResgistrar_Form_Abono=document.getElementById("Resgistrar_Form_Abono");
 
 // campos
+var jsbonificacion=document.querySelector("#bonificacion");
+var jsBonificacionFacturaCena=document.querySelector("#BonificacionFacturaCena");
 var user_name=document.querySelector("#user_name");
 var jsTotal_Informe_Producto = document.querySelector("#Total_Informe_Producto");
 var jstotalGeneralProducto=document.querySelector("#totalGeneralProducto");
@@ -1367,6 +1369,7 @@ function ConsultarFactura(id_facturaG) {
       jsVerabono_factura.textContent=parseFloat(DatosFactura[0].abono).toLocaleString();
       jsVersaldo_pendiente.textContent=parseFloat(DatosFactura[0].saldo_pendiente).toLocaleString();
       jsVercambio.textContent=parseFloat(DatosFactura[0].cambio).toLocaleString();
+      jsbonificacion.textContent=parseFloat(DatosFactura[0].bonificacion).toLocaleString();;
       for(var i = 0; i < DatosFactura.length; i++) {
         var nombre_producto = DatosFactura[i].nombre_producto;
         var cantidad = parseFloat(DatosFactura[i].cantidad);
@@ -1900,7 +1903,7 @@ if(BtnCalcularFacturaCena)
     // Recorrer todos los inputTotal y sumar sus valores
 
     var total = 0;
-
+    var bonificacion=jsBonificacionFacturaCena.value;
     var inputsTotal = document.querySelectorAll('input[name^="campo"][name$="3"]');
     for (var i = 0; i < inputsTotal.length; i++) {
       total += parseFloat(inputsTotal[i].value);
@@ -1921,6 +1924,13 @@ if(BtnCalcularFacturaCena)
     }else{
       TotalFacturaCena.value = total;
       CambioFacturaCena.value=0;
+    }
+
+    if(jsBonificacionFacturaCena.value != ""){
+      TotalFacturaCena.value = total-parseFloat(jsBonificacionFacturaCena.value);
+    }else{
+      TotalFacturaCena.value = total;
+      jsBonificacionFacturaCena.value=0;
     }
 
     if (jsCheckPendientePorPagar.checked) {
@@ -1961,6 +1971,7 @@ if (btnRegistrarFacturaCena) {
     var SaldoPendienteViejo = jsSpcliente.value;
     var id_cliente = jsListadoClientesFactura.value;
     var id_factura_anterior = jsId_factura_anterior.value;
+    var bonificacion=jsBonificacionFacturaCena.value;
     var estado = "";
     if (id_cliente == "null") {
       Swal.fire({
@@ -2028,7 +2039,7 @@ if (btnRegistrarFacturaCena) {
       "&saldo_pendiente=" +
       SaldoPendiente +
       "&factura_productos=" +
-      JSON.stringify(factura)+"&saldo_pendiente_viejo=" +SaldoPendienteViejo +"&id_factura_anterior=" + id_factura_anterior;
+      JSON.stringify(factura)+"&saldo_pendiente_viejo=" +SaldoPendienteViejo +"&id_factura_anterior=" + id_factura_anterior +"&bonificacion="+ bonificacion;
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "app/controlador/CenaControlador.php", true);

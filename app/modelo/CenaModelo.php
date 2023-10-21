@@ -112,10 +112,11 @@ class CenaModelo
                   $l->execute();
             }
 
-            $x = Conexion::conectar()->prepare("INSERT INTO tbl_factura(tbl_id_factura, tbl_id_cliente, tbl_total, tbl_abono, tbl_saldo_pendiente,tbl_cambio, tbl_fecha_creacion, tbl_fecha_actualizacion, tbl_estado) VALUES (null, :id_cliente , :total , :abono, :saldo_pendiente, :cambio, :fecha_creacion, :fecha_actualizacion, :estado)");
+            $x = Conexion::conectar()->prepare("INSERT INTO tbl_factura(tbl_id_factura, tbl_id_cliente, tbl_total, tbl_abono, tbl_saldo_pendiente,tbl_cambio, tbl_bonificacion, tbl_fecha_creacion, tbl_fecha_actualizacion, tbl_estado) VALUES (null, :id_cliente , :total , :abono, :saldo_pendiente, :cambio, :bonificacion, :fecha_creacion, :fecha_actualizacion, :estado)");
             $x->bindParam(":id_cliente", $datos["id_cliente"], PDO::PARAM_INT);
             $x->bindParam(":total", $datos["total"], PDO::PARAM_STR);
             $x->bindParam(":abono", $datos["abono"], PDO::PARAM_STR);
+            $x->bindParam(":bonificacion", $datos["bonificacion"], PDO::PARAM_STR);
             $x->bindParam(":saldo_pendiente", $datos["saldo_pendiente"], PDO::PARAM_STR);
             $x->bindParam(":fecha_creacion", $datos["fechaCA"], PDO::PARAM_STR);
             $x->bindParam(":fecha_actualizacion", $datos["fechaCA"], PDO::PARAM_STR);
@@ -156,7 +157,7 @@ class CenaModelo
 
       static public function ConsultarFactura($datos)
       {
-            $x = Conexion::conectar()->prepare("SELECT F.tbl_cambio as cambio, F.tbl_total as total, F.tbl_abono as abono, F.tbl_saldo_pendiente as saldo_pendiente, F.tbl_fecha_creacion as fecha_creacion, F.tbl_fecha_actualizacion as fecha_actualizacion, FP.tbl_cantidad as cantidad, FP.tbl_precio as precio, FP.tbl_total as total_producto, P.tbl_productos_nombre as nombre_producto, C.tbl_clientes_nombre as nombre_cliente FROM tbl_factura as F INNER JOIN tbl_factura_productos as FP on F.tbl_id_factura=FP.tbl_id_factura INNER JOIN tbl_productos as P on FP.tbl_id_producto=P.tbl_productos_id INNER JOIN tbl_clientes as C on F.tbl_id_cliente=C.tbl_clientes_id WHERE F.tbl_id_factura=:id_factura");
+            $x = Conexion::conectar()->prepare("SELECT F.tbl_cambio as cambio, F.tbl_total as total, F.tbl_bonificacion as bonificacion, F.tbl_abono as abono, F.tbl_saldo_pendiente as saldo_pendiente, F.tbl_fecha_creacion as fecha_creacion, F.tbl_fecha_actualizacion as fecha_actualizacion, FP.tbl_cantidad as cantidad, FP.tbl_precio as precio, FP.tbl_total as total_producto, P.tbl_productos_nombre as nombre_producto, C.tbl_clientes_nombre as nombre_cliente FROM tbl_factura as F INNER JOIN tbl_factura_productos as FP on F.tbl_id_factura=FP.tbl_id_factura INNER JOIN tbl_productos as P on FP.tbl_id_producto=P.tbl_productos_id INNER JOIN tbl_clientes as C on F.tbl_id_cliente=C.tbl_clientes_id WHERE F.tbl_id_factura=:id_factura");
             $x->bindParam(":id_factura", $datos["id_factura"], PDO::PARAM_INT);
             $x->execute();
             return $x->fetchAll(PDO::FETCH_ASSOC);
