@@ -1457,12 +1457,10 @@ function cargarTablaHistorialFactura() {
                btneliminar="btnEliminarFactura";
              }
             }
-            if(facturaData.estado=="PAGADO")
-            {
+            if(facturaData.estado=="PAGADO") {
                estadoF='<td><label style="color:#45a33f;">'+facturaData.estado+'</label></td>';
             }
-            else
-            {
+            else {
               estadoF='<td><label style="color:red;">'+facturaData.estado+'</label></td>';
             }
             var fila = `
@@ -1938,8 +1936,11 @@ if(BtnCalcularFacturaCena)
 }
 function EstadoDeFactura(TotalAPagar) {
   if (jsCheckPendientePorPagar.checked) {
+    AbonoFacturaCena.disabled=false;
     SaldoPendienteFacturaCena.value = parseFloat(TotalAPagar) - parseFloat(AbonoFacturaCena.value) ;
   } else{
+    AbonoFacturaCena.value=0;
+    AbonoFacturaCena.disabled=true;
     SaldoPendienteFacturaCena.value=0;
   }
 
@@ -1970,7 +1971,9 @@ if (btnRegistrarFacturaCena) {
       return;
     }
     if (SaldoPendiente == 0) {
-      abono=abono-totalTotal;
+      if(jsCheckPendientePorPagar.disabled==true){
+        abono=abono-totalTotal;
+      }
       estado = "PAGADO";
     } else {
       estado = "PENDIENTE";
@@ -2461,6 +2464,12 @@ if( jsListadoClientesFactura){
       if (xhr.readyState === 4 && xhr.status === 200) {
         var res = JSON.parse(this.responseText);
         var sp = res.saldo_pendiente ?? 0;
+        if(sp){
+          AbonoFacturaCena.disabled=false;
+        }else{
+          AbonoFacturaCena.value=0;
+          AbonoFacturaCena.disabled=true;
+        }
         jsSpcliente.value= sp.toLocaleString('es-ES');
         SaldoPendienteFacturaCena.value=0;
         jsCheckPendientePorPagar.disabled = true;

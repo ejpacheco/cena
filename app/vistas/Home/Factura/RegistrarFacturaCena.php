@@ -48,7 +48,7 @@
                                                 </div>
                                                 <div class="col-md-2">
                                                     <label class="form-label">ABONO</label>
-                                                    <input type="text" class="form-control" id="AbonoFacturaCena" value="0">
+                                                    <input type="text" class="form-control" id="AbonoFacturaCena" value="0" disabled>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <label class="form-label" style="color:red;">SALDO ANTERIOR</label>
