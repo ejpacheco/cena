@@ -33,6 +33,20 @@ class CenaModelo
             return $x->fetchAll(PDO::FETCH_ASSOC);
       }
 
+      static public function ListarProductosConResultado()
+      {
+            $x = Conexion::conectar()->prepare("SELECT
+            P.tbl_productos_id as id_producto,
+            P.tbl_productos_nombre as nombre_producto,
+            P.tbl_productos_precio as precio,
+            P.tbl_producto_cantidad as cantidad,
+            (P.tbl_productos_precio * P.tbl_producto_cantidad) as resultado
+        FROM tbl_productos as P");
+            $x->execute();
+
+            return $x->fetchAll(PDO::FETCH_ASSOC);
+      }
+
       static public function ActualizarProducto($datos)
       {
             $x = Conexion::conectar()->prepare("UPDATE tbl_productos SET tbl_productos_nombre=:nombre_producto , tbl_productos_precio=:precio  WHERE tbl_productos_id=:id_producto ");

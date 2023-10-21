@@ -2533,8 +2533,8 @@ if(jsLLenar_Informe_Producto){
                   <tr>
                     <td style="font-size: 12px; text-align: center;">&nbsp;&nbsp;${nombre_producto}-&nbsp;</td>
                     <td style="font-size: 12px; text-align: center;">${cantidad} -</td>
-                    <td style="font-size: 12px; text-align: center;">&nbsp;${precioP} -</td>
-                    <td style="font-size: 12px; text-align: center;">&nbsp;${monto_total.toLocaleString("es-Es")}&nbsp;</td>
+                    <td style="font-size: 12px; text-align: center;">&nbsp;(${precioP}) -</td>
+                    <td style="font-size: 12px; text-align: center;">&nbsp;(${monto_total.toLocaleString("es-Es")})&nbsp;</td>
                   </tr>
                 `;
                   tablaHtmlInformeProducto += fila;
@@ -2575,7 +2575,7 @@ if(btnImprimirInventarioFinal){
 }
 
 if(jsLLenar_Informe_Producto_Hoy){
-  opcion = "ListarProductos";
+  opcion = "ListarProductosConResultado";
   var fechaInforme = Fecha_Informe_Producto;
   var tablaHtmlInformeProducto="";
 
@@ -2590,10 +2590,14 @@ if(jsLLenar_Informe_Producto_Hoy){
           for (var i = 0; i < consultaInforme.length; i++) {
             var cantidad = consultaInforme[i].cantidad;
             var nombre_producto = consultaInforme[i].nombre_producto;
+            var precio = consultaInforme[i].precio;
+            var total = consultaInforme[i].resultado;
             var fila = `
             <tr>
+             <td style="font-size: 12px; text-align: center;">(${cantidad}) -</td>
               <td style="font-size: 12px; text-align: center;">&nbsp;&nbsp;${nombre_producto} -&nbsp;</td>
-              <td style="font-size: 12px; text-align: center;">(${cantidad})</td>
+              <td style="font-size: 12px; text-align: center;">&nbsp;(${precio}) -</td>
+              <td style="font-size: 12px; text-align: center;">&nbsp;(${total})</td>
             </tr>
           `;
             tablaHtmlInformeProducto += fila;

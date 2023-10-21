@@ -17,6 +17,11 @@ class CenaControlador
         $respuesta = CenaModelo::ListarProductos();
         return $respuesta;
     }
+    public function ListarProductosConResultado()
+    {
+        $respuesta = CenaModelo::ListarProductosConResultado();
+        return $respuesta;
+    }
     public function ActualizarProducto($datos)
     {
         $respuesta = CenaModelo::ActualizarProducto($datos);
@@ -276,6 +281,10 @@ if (isset($_POST["opcion"])) {
     elseif ($_POST["opcion"] == "Consultarsaldopendiente") :
         $respuesta = new CenaControlador();
         $respuesta = $respuesta->ConsultarSaldoPendiente($id_cliente);
+        echo json_encode($respuesta, JSON_UNESCAPED_UNICODE);
+    elseif ($_POST["opcion"] == "ListarProductosConResultado") :
+        $respuesta = new CenaControlador();
+        $respuesta = $respuesta->ListarProductosConResultado();
         echo json_encode($respuesta, JSON_UNESCAPED_UNICODE);
     endif;
 }
