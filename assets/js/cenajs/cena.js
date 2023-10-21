@@ -2582,7 +2582,7 @@ if(jsLLenar_Informe_Producto_Hoy){
             var fila = `
             <tr>
               <td style="font-size: 12px; text-align: center;">&nbsp;&nbsp;${nombre_producto} -&nbsp;</td>
-              <td style="font-size: 12px; text-align: center;">${cantidad}</td>
+              <td style="font-size: 12px; text-align: center;">(${cantidad})</td>
             </tr>
           `;
             tablaHtmlInformeProducto += fila;
