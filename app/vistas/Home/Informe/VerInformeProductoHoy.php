@@ -14,9 +14,9 @@
     <thead>
         <tr>
             <th style="text-align: left;">&nbsp;Cant.&nbsp;</th>
-            <th style="text-align: left;">&nbsp;&nbsp;Producto&nbsp;&nbsp;</th>
-            <th style="text-align: left;">&nbsp;&nbsp;Precio&nbsp;&nbsp;</th>
-            <th style="text-align: left;">&nbsp;&nbsp;Total&nbsp;&nbsp;</th>
+            <th style="text-align: left;">&nbsp;Producto&nbsp;</th>
+            <th style="text-align: left;">&nbsp;Precio&nbsp;</th>
+            <th style="text-align: left;">&nbsp;Total&nbsp;</th>
         </tr>
     </thead>
     <tbody id="LLenar_Informe_Producto_Hoy">
