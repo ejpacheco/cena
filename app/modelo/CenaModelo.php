@@ -36,16 +36,28 @@ class CenaModelo
       static public function ListarProductosConResultado()
       {
             $x = Conexion::conectar()->prepare("SELECT
-            P.tbl_productos_id as id_producto,
-            P.tbl_productos_nombre as nombre_producto,
-            P.tbl_productos_precio as precio,
-            P.tbl_producto_cantidad as cantidad,
-            (P.tbl_productos_precio * P.tbl_producto_cantidad) as resultado
-        FROM tbl_productos as P");
+        P.tbl_productos_id as id_producto,
+        P.tbl_productos_nombre as nombre_producto,
+        P.tbl_productos_precio as precio,
+        P.tbl_producto_cantidad as cantidad,
+        (P.tbl_productos_precio * P.tbl_producto_cantidad) as resultado
+    FROM tbl_productos as P");
             $x->execute();
 
-            return $x->fetchAll(PDO::FETCH_ASSOC);
+            $resultados = $x->fetchAll(PDO::FETCH_ASSOC);
+
+            // Calcular el total de los resultados
+            $total = 0;
+            foreach ($resultados as $fila) {
+                  $total += $fila['resultado'];
+            }
+
+            return [
+                  'resultados' => $resultados,
+                  'total' => $total
+            ];
       }
+
 
       static public function ActualizarProducto($datos)
       {

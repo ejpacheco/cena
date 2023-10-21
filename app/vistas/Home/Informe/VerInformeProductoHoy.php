@@ -26,6 +26,10 @@
         <tr>
             <th colspan="4">============================</th>
         </tr>
+        <tr>
+            <th colspan="2">Total:&nbsp;</th>
+            <td><label id="Total_Informe_Producto"></label></td>
+        </tr>
     </tfoot>
 </table>
 <p>...</p>

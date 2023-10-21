@@ -2574,12 +2574,13 @@ if(btnImprimirInventarioFinal){
 
 }
 
-if(jsLLenar_Informe_Producto_Hoy){
+if (jsLLenar_Informe_Producto_Hoy) {
   opcion = "ListarProductosConResultado";
   var fechaInforme = Fecha_Informe_Producto;
-  var tablaHtmlInformeProducto="";
+  var tablaHtmlInformeProducto = "";
+  var total = 0; // Inicializamos una variable para el total
 
-  var data = "opcion=" + opcion + "&fechaInforme="+ fechaInforme;
+  var data = "opcion=" + opcion + "&fechaInforme=" + fechaInforme;
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "app/controlador/CenaControlador.php", true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -2587,23 +2588,36 @@ if(jsLLenar_Informe_Producto_Hoy){
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       var consultaInforme = JSON.parse(this.responseText);
-          for (var i = 0; i < consultaInforme.length; i++) {
-            var cantidad = consultaInforme[i].cantidad;
-            var nombre_producto = consultaInforme[i].nombre_producto;
-            var precio = consultaInforme[i].precio;
-            var total = consultaInforme[i].resultado;
-            var fila = `
+      for (var i = 0; i < consultaInforme.resultados.length; i++) {
+        var cantidad = consultaInforme.resultados[i].cantidad;
+        var nombre_producto = consultaInforme.resultados[i].nombre_producto;
+        var precio = consultaInforme.resultados[i].precio;
+        var resultado = consultaInforme.resultados[i].resultado;
+        var fila = `
             <tr>
-             <td style="font-size: 8px; text-align: center;">(${cantidad}) -</td>
-              <td style="font-size: 8px; text-align: center;">${nombre_producto} -</td>
-              <td style="font-size: 8px; text-align: center;">(${precio}) -</td>
-              <td style="font-size: 8px; text-align: center;">(${total})</td>
+              <td style="font-size: 7px; text-align: center;">(${cantidad}) -</td>
+              <td style="font-size: 7px; text-align: center;">${nombre_producto} -</td>
+              <td style="font-size: 7px; text-align: center;">(${precio}) -</td>
+              <td style="font-size: 7px; text-align: center;">(${resultado})</td>
             </tr>
           `;
-            tablaHtmlInformeProducto += fila;
-          }
-          jsLLenar_Informe_Producto_Hoy.innerHTML = tablaHtmlInformeProducto;
+        tablaHtmlInformeProducto += fila;
 
+        // Sumar el resultado actual al total
+        total += parseFloat(resultado);
+      }
+
+      // Agregar una fila para mostrar el total
+      var filaTotal = `
+          <tr>
+            <td colspan="3" style="font-size: 7px; text-align: right;">Total:</td>
+            <td style="font-size: 7px; text-align: center;">(${total})</td>
+          </tr>
+        `;
+      tablaHtmlInformeProducto += filaTotal;
+
+      jsLLenar_Informe_Producto_Hoy.innerHTML = tablaHtmlInformeProducto;
+      jsTotal_Informe_Producto.textContent=total.toLocaleString("es-ES");
     } else if (xhr.readyState === 4 && xhr.status !== 200) {
       alert(
         "Error en la solicitud: " +
