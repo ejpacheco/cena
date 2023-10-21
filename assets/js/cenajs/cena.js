@@ -77,7 +77,7 @@ var SaldoPendienteFacturaCena= document.querySelector("#SaldoPendienteFacturaCen
 
 
 // tablas
-
+var jsLLenar_Informe_Producto_Hoy=document.querySelector("#LLenar_Informe_Producto_Hoy");
 var jsTablaInformeGeneralPorMes= document.querySelector("#TablaInformeGeneralPorMes");
 var jsTablaProducto = document.querySelector("#TablaProductos");
 var jsTablaInformeProducto = document.querySelector("#TablaInformeProducto");
@@ -122,6 +122,7 @@ if (modalRegistrarAbono) {
 }
 
 // botones
+var btnImprimirInventarioFinal=document.querySelector(".btnImprimirInventarioFinal");
 var jsbtnImprimirInformeProducto=document.querySelector(".btnImprimirInformeProducto");
 var jsBotonBuscarInformeGeneralPorMes = document.querySelector(".btnBuscarInformeGeneralPorMes");
 var jsBotonBuscarProducto = document.querySelector(".btnBuscarProducto");
@@ -2552,4 +2553,52 @@ if(jsbtnImprimirInformeProducto){
   var fechaInformeP = jsFechaDeInformeProducto.value;
   window.open("/cena/VerInformeProducto?fecha_informe_producto=" + fechaInformeP, "_blank");
  });
+}
+
+if(btnImprimirInventarioFinal){
+
+  btnImprimirInventarioFinal.addEventListener("click",function(e) {
+    window.open("/cena/VerInformeProductoHoy", "_blank");
+  });
+
+}
+
+if(jsLLenar_Informe_Producto_Hoy){
+  opcion = "ListarProductos";
+  var fechaInforme = Fecha_Informe_Producto;
+  var tablaHtmlInformeProducto="";
+
+  var data = "opcion=" + opcion + "&fechaInforme="+ fechaInforme;
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "app/controlador/CenaControlador.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var consultaInforme = JSON.parse(this.responseText);
+          for (var i = 0; i < consultaInforme.length; i++) {
+            var cantidad = consultaInforme[i].cantidad;
+            var nombre_producto = consultaInforme[i].nombre_producto;
+            var fila = `
+            <tr>
+              <td style="font-size: 12px; text-align: center;">&nbsp;&nbsp;${nombre_producto} -&nbsp;</td>
+              <td style="font-size: 12px; text-align: center;">${cantidad}</td>
+            </tr>
+          `;
+            tablaHtmlInformeProducto += fila;
+          }
+          jsLLenar_Informe_Producto_Hoy.innerHTML = tablaHtmlInformeProducto;
+
+    } else if (xhr.readyState === 4 && xhr.status !== 200) {
+      alert(
+        "Error en la solicitud: " +
+          xhr.status +
+          " " +
+          xhr.statusText +
+          " " +
+          xhr.response
+      );
+    }
+  };
+  xhr.send(data);
 }

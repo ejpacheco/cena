@@ -21,6 +21,7 @@
                                                 <button type="button" class="btn btn-primary btnBuscarInventario">Buscar</button>
                                                 <button type="button" class="btn btn-secondary btnLimpiarInventario">Limpiar</button>
                                                 <button type="button" class="btn btn-success btnGuardarInventario">Guardar</button>
+                                                <button type="button" class="btn btn-dark btnImprimirInventarioFinal">Imprimir</button>
                                             </div>
                                         </div>
                                         <div class="table-responsive">
