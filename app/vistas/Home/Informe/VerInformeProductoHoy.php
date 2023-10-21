@@ -13,8 +13,8 @@
 <table style="text-align: left">
     <thead>
         <tr>
-            <th style="text-align: center;">&nbsp;Cant.&nbsp;</th>
-            <th style="text-align: center;">&nbsp;&nbsp;Producto&nbsp;&nbsp;</th>
+            <th style="text-align: left;">&nbsp;&nbsp;&nbsp;Cant.&nbsp;&nbsp;&nbsp;</th>
+            <th style="text-align: left;">&nbsp;&nbsp;Producto&nbsp;&nbsp;</th>
         </tr>
     </thead>
     <tbody id="LLenar_Informe_Producto_Hoy">
