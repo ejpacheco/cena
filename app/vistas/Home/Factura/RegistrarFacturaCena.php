@@ -53,7 +53,7 @@
                                                 <div class="col-md-3">
                                                     <label class="form-label" style="color:red;">SALDO ANTERIOR</label>
                                                     <input type="text" id="sp_cliente" value="0" class="form-control" disabled>
-                                                    <input type="text" id="id_factura_anterior" value="0" class="form-control">
+                                                    <input type="text" id="id_factura_anterior" value="0" class="form-control" hidden>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <label class="form-label">SALDO PENDIENTE </label>
