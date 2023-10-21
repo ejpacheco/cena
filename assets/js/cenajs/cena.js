@@ -22,6 +22,8 @@ var jsFormRegistrarFactura = document.getElementById("RegistrarFactura");
 var jsFormResgistrar_Form_Abono=document.getElementById("Resgistrar_Form_Abono");
 
 // campos
+var jsSpcliente=document.querySelector("#sp_cliente");
+var jsId_factura_anterior=document.querySelector("#id_factura_anterior");
 var jsProducto = document.querySelector("#producto");
 var jsCheckPendientePorPagar = document.querySelector("#checkPendientePorPagar");
 var jsFechaInicialInformePeriodo = document.querySelector("#FechaInicialInformePeriodo");
@@ -1816,6 +1818,8 @@ function cargarTablaFacturaCena() {
 
         inputCantidad.addEventListener("change", (function(cantidad, precio, inputTotal) {
           return function() {
+            jsCheckPendientePorPagar.checked=false;
+            SaldoPendienteFacturaCena.value=0;
             if (isNaN(cantidad.value) || isNaN(precio.value) || cantidad.value === "" || precio.value === "") {
               TotalFacturaCena.value=parseFloat(TotalFacturaCena.value)-parseFloat(inputTotal.value);
               inputTotal.value = 0;
@@ -1831,6 +1835,8 @@ function cargarTablaFacturaCena() {
 
         inputPrecioUnitario.addEventListener("change", (function(cantidad, precio, inputTotal) {
           return function() {
+            jsCheckPendientePorPagar.checked=false;
+            SaldoPendienteFacturaCena.value=0;
             if (isNaN(cantidad.value) || isNaN(precio.value) || cantidad.value === "" || precio.value === "") {
               TotalFacturaCena.value=parseFloat(TotalFacturaCena.value)-parseFloat(inputTotal.value);
               inputTotal.value = 0;
@@ -1867,39 +1873,47 @@ if (jsTablaFacturaCena) {
 //boton de calcular factura
 if(BtnCalcularFacturaCena)
 {
+  var cuentacheck=0;
   BtnCalcularFacturaCena.addEventListener("click", function() {
     // Recorrer todos los inputTotal y sumar sus valores
+
     var total = 0;
+
     var inputsTotal = document.querySelectorAll('input[name^="campo"][name$="3"]');
     for (var i = 0; i < inputsTotal.length; i++) {
       total += parseFloat(inputsTotal[i].value);
     }
-    if(CambioFacturaCena.value != "" )
-    {
+
+     if(jsSpcliente.value == 0){
+      jsCheckPendientePorPagar.disabled=false;
+     }
+
+    if(CambioFacturaCena.value != "" ) {
       TotalFacturaCena.value = total-parseFloat(CambioFacturaCena.value);
-    }
-    else{
+    }else{
       TotalFacturaCena.value = total;
       CambioFacturaCena.value=0;
     }
-    if(AbonoFacturaCena.value != "" &&  AbonoFacturaCena.value!=0)
-    {
 
-      SaldoPendienteFacturaCena.value=parseFloat(TotalFacturaCena.value)-parseFloat(AbonoFacturaCena.value)
+    // if(AbonoFacturaCena.value != "" &&  AbonoFacturaCena.value!=0 && jsSpcliente.value != 0 && jsCheckPendientePorPagar.checked ){
+    //   SaldoPendienteFacturaCena.value=parseFloat(SaldoPendienteFacturaCena.value)-parseFloat(AbonoFacturaCena.value);
+    //   cuentacheck=cuentacheck+1;
+    // }
+     if(AbonoFacturaCena.value != "" &&  AbonoFacturaCena.value!=0 ){
+      SaldoPendienteFacturaCena.value=parseFloat( TotalFacturaCena.value) + parseFloat(jsSpcliente.value) -parseFloat(AbonoFacturaCena.value);
     }
-    else
-    {
-      SaldoPendienteFacturaCena.value=0;
-    }
+
+    console.log(cuentacheck);
 
   });
 }
 function EstadoDeFactura(TotalAPagar) {
   if (jsCheckPendientePorPagar.checked) {
-    SaldoPendienteFacturaCena.value = TotalAPagar;
-  } else {
-    SaldoPendienteFacturaCena.value = 0;
+    SaldoPendienteFacturaCena.value = parseFloat(TotalAPagar) - parseFloat(AbonoFacturaCena.value) ;
+  } else{
+    SaldoPendienteFacturaCena.value=0;
   }
+
 }
 if (btnRegistrarFacturaCena) {
   jsCheckPendientePorPagar.addEventListener("change", function () {
@@ -1913,7 +1927,9 @@ if (btnRegistrarFacturaCena) {
     var cambio = CambioFacturaCena.value;
     var abono = AbonoFacturaCena.value;
     var SaldoPendiente = SaldoPendienteFacturaCena.value;
+    var SaldoPendienteViejo = jsSpcliente.value;
     var id_cliente = jsListadoClientesFactura.value;
+    var id_factura_anterior = jsId_factura_anterior.value;
     var estado = "";
     if (id_cliente == "null") {
       Swal.fire({
@@ -1975,7 +1991,7 @@ if (btnRegistrarFacturaCena) {
       "&saldo_pendiente=" +
       SaldoPendiente +
       "&factura_productos=" +
-      JSON.stringify(factura);
+      JSON.stringify(factura)+"&saldo_pendiente_viejo=" +SaldoPendienteViejo +"&id_factura_anterior=" + id_factura_anterior;
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "app/controlador/CenaControlador.php", true);
@@ -2388,4 +2404,37 @@ if (jsBotonBuscarInformeGeneralPorMes) {
   jsBotonBuscarInformeGeneralPorMes.addEventListener("click", function () {
     consultarInformeGeneralPorPeriodos();
   });
+}
+
+if( jsListadoClientesFactura){
+  jsListadoClientesFactura.addEventListener("change", function (event) {
+    opcion = "Consultarsaldopendiente";
+    let id_cliente = jsListadoClientesFactura.value ;
+    var data = "id_cliente=" + id_cliente + "&opcion=" + opcion;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "app/controlador/CenaControlador.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var res = JSON.parse(this.responseText);
+        var sp = res.saldo_pendiente ?? 0;
+        jsSpcliente.value= sp.toLocaleString('es-ES');
+        SaldoPendienteFacturaCena.value=0;
+        jsCheckPendientePorPagar.disabled = true;
+        jsId_factura_anterior.value = res.id_factura ?? 0;
+      } else if (xhr.readyState === 4 && xhr.status !== 200) {
+        alert(
+          "Error en la solicitud: " +
+            xhr.status +
+            " " +
+            xhr.statusText +
+            " " +
+            xhr.response
+        );
+      }
+    };
+    xhr.send(data);
+  });
+
 }

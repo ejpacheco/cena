@@ -98,6 +98,11 @@ class CenaControlador
         $respuesta = CenaModelo::ConsultarInformeGeneralPorPeriodos($fechaI,$fechaF);
         return $respuesta;
     }
+    public function  ConsultarSaldoPendiente($data)
+    {
+        $respuesta = CenaModelo::ConsultarSaldoPendiente($data);
+        return $respuesta;
+    }
 }
 
 if (isset($_POST["opcion"])) {
@@ -116,8 +121,10 @@ if (isset($_POST["opcion"])) {
     $cliente_telefono_editado = (isset($_POST["editar_cliente_telefono"])) ? $_POST['editar_cliente_telefono'] : null;
     $cliente_cedula_editado = (isset($_POST["editar_cliente_cedula"])) ? $_POST['editar_cliente_cedula'] : null;
     $id_cliente = (isset($_POST["id_cliente"])) ? $_POST['id_cliente'] : null;
+    $id_factura_anterior = (isset($_POST["id_factura_anterior"])) ? $_POST['id_factura_anterior'] : null;
     $total = isset($_POST["total"]) ? $_POST["total"] : "0";
     $saldo_pendiente = isset($_POST["saldo_pendiente"]) ? $_POST["saldo_pendiente"] : "0";
+    $saldo_pendiente_viejo = isset($_POST["saldo_pendiente_viejo"]) ? $_POST["saldo_pendiente_viejo"] : "0";
     $abono = isset($_POST["abono"]) ? $_POST["abono"] : "0";
     $abono_nuevo = isset($_POST["abono_nuevo"]) ? $_POST["abono_nuevo"] : "0";
     $fecha_actual = date('Y-m-d');
@@ -144,8 +151,10 @@ if (isset($_POST["opcion"])) {
             'cliente_telefono_editado' => $cliente_telefono_editado,
             'id_cliente' => $id_cliente,
             'id_producto' => $id_producto,
+            'id_factura_anterior' => $id_factura_anterior,
             'total' => $total,
             'saldo_pendiente' => $saldo_pendiente,
+            'saldo_pendiente_viejo' => $saldo_pendiente_viejo,
             'abono' => $abono,
             'fechaCA' => $fecha_creacion,
             'id_factura' => $id_factura,
@@ -261,6 +270,10 @@ if (isset($_POST["opcion"])) {
     elseif ($_POST["opcion"] == "ConsultarInformeGeneralPorPeriodos") :
         $respuesta = new CenaControlador();
         $respuesta = $respuesta->ConsultarInformeGeneralPorPeriodos($fechaInforme,$fechaInformeFinal);
+        echo json_encode($respuesta, JSON_UNESCAPED_UNICODE);
+    elseif ($_POST["opcion"] == "Consultarsaldopendiente") :
+        $respuesta = new CenaControlador();
+        $respuesta = $respuesta->ConsultarSaldoPendiente($id_cliente);
         echo json_encode($respuesta, JSON_UNESCAPED_UNICODE);
     endif;
 }

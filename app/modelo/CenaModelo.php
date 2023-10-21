@@ -106,6 +106,10 @@ class CenaModelo
 
       static public function RegistrarFactura($datos, $factura_productos)
       {
+            $l = Conexion::conectar()->prepare("UPDATE tbl_factura SET tbl_saldo_pendiente=0,tbl_estado='PAGADO' WHERE tbl_id_factura=:id_factura");
+            $l->bindParam(":id_factura", $datos["id_factura_anterior"], PDO::PARAM_INT);
+            $l->execute();
+
             $x = Conexion::conectar()->prepare("INSERT INTO tbl_factura(tbl_id_factura, tbl_id_cliente, tbl_total, tbl_abono, tbl_saldo_pendiente,tbl_cambio, tbl_fecha_creacion, tbl_fecha_actualizacion, tbl_estado) VALUES (null, :id_cliente , :total , :abono, :saldo_pendiente, :cambio, :fecha_creacion, :fecha_actualizacion, :estado)");
             $x->bindParam(":id_cliente", $datos["id_cliente"], PDO::PARAM_INT);
             $x->bindParam(":total", $datos["total"], PDO::PARAM_STR);
@@ -263,6 +267,16 @@ class CenaModelo
             FROM tbl_factura as F  WHERE DATE(F.tbl_fecha_creacion) >= :fechaI and DATE(F.tbl_fecha_creacion) <= :fechaF");
             $x->bindParam(":fechaI", $fechaI, PDO::PARAM_STR);
             $x->bindParam(":fechaF", $fechaF, PDO::PARAM_STR);
+            $x->execute();
+
+            return $x->fetch(PDO::FETCH_ASSOC);
+      }
+
+      static public function ConsultarSaldoPendiente($data)
+      {
+            $x = Conexion::conectar()->prepare("SELECT F.tbl_saldo_pendiente as saldo_pendiente, F.tbl_id_factura as id_factura
+             FROM tbl_factura as F WHERE F.tbl_id_cliente=:id_cliente and F.tbl_estado='PENDIENTE'");
+            $x->bindParam(":id_cliente", $data, PDO::PARAM_INT);
             $x->execute();
 
             return $x->fetch(PDO::FETCH_ASSOC);

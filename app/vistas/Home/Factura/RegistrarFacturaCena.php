@@ -17,10 +17,9 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-6 mb-4">
-                                                    <div class="form-group">
+                                                       Seleccione un cliente
                                                         <select class="form-select" id="ListadoClientesFactura">
                                                         </select>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="table-responsive">
@@ -39,20 +38,25 @@
                                                 </table>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <label class="form-label">CAMBIO</label>
                                                     <input type="text" class="form-control" id="CambioFacturaCena" value="0">
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <label class="form-label">TOTAL</label>
                                                     <input type="text" class="form-control" id="TotalFacturaCena" value="0">
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <label class="form-label">ABONO</label>
                                                     <input type="text" class="form-control" id="AbonoFacturaCena" value="0">
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label class="form-label">SALDO PENDIENTE</label>
+                                                    <label class="form-label" style="color:red;">SALDO ANTERIOR</label>
+                                                    <input type="text" id="sp_cliente" value="0" class="form-control" disabled>
+                                                    <input type="text" id="id_factura_anterior" value="0" class="form-control">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label">SALDO PENDIENTE </label>
                                                     <input type="text" class="form-control" id="SaldoPendienteFacturaCena" value="0">
                                                 </div>
                                             </div>
@@ -60,7 +64,7 @@
                                             <div class="row mt-3">
                                                 <div class="col-md-12 d-flex justify-content-center">
                                                     <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" id="checkPendientePorPagar" >
+                                                        <input class="form-check-input" type="checkbox" id="checkPendientePorPagar" disabled >
                                                         <label class="form-check-label">Pendiente Por Pagar</label>
                                                     </div>
                                                     <button type="button" class="btn btn-secondary btnCalcular mx-3">CALCULAR</button>
