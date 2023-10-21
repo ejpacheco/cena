@@ -106,7 +106,7 @@ session_start();
    <?php
    endif;
    ?>
-   <script src="assets/js/cenajs/cena.js?v=12"></script>
+   <script src="assets/js/cenajs/cena.js?v=13"></script>
 
 </body>
 
