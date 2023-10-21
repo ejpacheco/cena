@@ -12,7 +12,7 @@ session_start();
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>CENA</title>
    <?php
-   if (isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura") :
+   if (isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura" && $_GET["ruta"] != "VerInformeProducto") :
    ?>
       <link rel="preconnect" href="https://fonts.gstatic.com">
       <link rel="stylesheet" href="assets/css/bootstrap.css">
@@ -47,11 +47,15 @@ session_start();
       include "app/vistas/Home/Factura/VerFactura.php";
    endif;
 
+   if ((isset($_SESSION["sesion_active"])) && isset($_GET["ruta"]) && $_GET["ruta"] == "VerInformeProducto") :
+      include "app/vistas/Home/Informe/VerInformeProducto.php";
+   endif;
+
    if (isset($_GET["ruta"]) && $_GET["ruta"] == "prueba") :
       require_once './app/modelo/conexion.php';
    endif;
 
-   if (isset($_SESSION["sesion_active"]) && isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura" && $_GET["ruta"] != "prueba") {
+   if (isset($_SESSION["sesion_active"]) && isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura" && $_GET["ruta"] != "prueba"  && $_GET["ruta"] != "VerInformeProducto") {
       include "app/vistas/Home/Structure/Header.php";
       include "app/vistas/Home/Structure/Menu.php";
       if (isset($_GET["ruta"]) && $_GET["ruta"] == "index") :
@@ -75,7 +79,7 @@ session_start();
       else :
          include "app/vistas/Home/Dashboard.php";
       endif;
-   } elseif (isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura"  && $_GET["ruta"] != "prueba") {
+   } elseif (isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura"  && $_GET["ruta"] != "prueba"  && $_GET["ruta"] != "VerInformeProducto") {
       require_once "app/controlador/LoginControlador.php";
       include "app/vistas/Login/login.php";
    } elseif (empty($_GET["ruta"])) {
@@ -85,7 +89,7 @@ session_start();
    ?>
 
    <?php
-   if (isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura"  && $_GET["ruta"] != "prueba") :
+   if (isset($_GET["ruta"]) && $_GET["ruta"] != "VerFactura"  && $_GET["ruta"] != "prueba" && $_GET["ruta"] != "VerInformeProducto") :
    ?>
 
       <script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>

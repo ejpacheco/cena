@@ -132,6 +132,7 @@ $fechaActual = date("Y-m-d");
                                             </div>
                                             <div class="col-sm-6">
                                                 <button type="button" class="btn btn-secondary btnBuscarInformeProducto">Buscar</button>
+                                                <button type="button" class="btn btn-success btnImprimirInformeProducto">Imprimir</button>
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -141,12 +142,21 @@ $fechaActual = date("Y-m-d");
                                                     <tr>
                                                         <th>PRODUCTO</th>
                                                         <th>CANTIDAD</th>
+                                                        <th>PRECIO</th>
+                                                        <th>TOTAL</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="TablaInformeProducto">
-
+                                                    <!-- Contenido de la tabla va aquí -->
                                                 </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="2">TOTAL GENERAL:</td>
+                                                        <td id="totalGeneralProducto">0.00</td>
+                                                    </tr>
+                                                </tfoot>
                                             </table>
+
                                         </div>
                                     </div>
                                 </div>

@@ -9,10 +9,11 @@ function obtenerFechaActual() {
 }
 
 
+
 //se obtiene varibale por url
 const urlParams = new URLSearchParams(window.location.search);
 const id_facturaG = urlParams.get('id_factura');
-
+const Fecha_Informe_Producto = urlParams.get('fecha_informe_producto');
 // formularios
 var jsFormProductos = document.getElementById("Form_Productos");
 var jsFormClientes = document.getElementById("Form_Clientes_Cena");
@@ -22,6 +23,9 @@ var jsFormRegistrarFactura = document.getElementById("RegistrarFactura");
 var jsFormResgistrar_Form_Abono=document.getElementById("Resgistrar_Form_Abono");
 
 // campos
+var user_name=document.querySelector("#user_name");
+var jsTotal_Informe_Producto = document.querySelector("#Total_Informe_Producto");
+var jstotalGeneralProducto=document.querySelector("#totalGeneralProducto");
 var jsSpcliente=document.querySelector("#sp_cliente");
 var jsId_factura_anterior=document.querySelector("#id_factura_anterior");
 var jsProducto = document.querySelector("#producto");
@@ -85,6 +89,7 @@ var jsllenarTablaVerFactura = document.querySelector("#LLenar_Productos_Factura"
 var jsTablaHistorialFactura = document.querySelector("#TablaHistorialFactura");
 var jsTablaFacturaCena= document.querySelector("#TablaFacturaCena");
 var jsTablaInventario = document.querySelector("#TablaInventario");
+var jsLLenar_Informe_Producto=document.querySelector("#LLenar_Informe_Producto");
 
 // modales
 var modalEditarProducto = document.getElementById("ModalEditarProducto");
@@ -117,6 +122,7 @@ if (modalRegistrarAbono) {
 }
 
 // botones
+var jsbtnImprimirInformeProducto=document.querySelector(".btnImprimirInformeProducto");
 var jsBotonBuscarInformeGeneralPorMes = document.querySelector(".btnBuscarInformeGeneralPorMes");
 var jsBotonBuscarProducto = document.querySelector(".btnBuscarProducto");
 var jsBotonBuscarInformeProducto = document.querySelector(".btnBuscarInformeProducto");
@@ -182,6 +188,7 @@ function cargarTablaInventario() {
       var currentPageElem = document.getElementById("current-page");
 
       var inputValues = {};
+      var inputValues2 = {};
       // Función para mostrar las filas correspondientes a la página actual
       function showRows() {
         tablaHtmlInventario = "";
@@ -190,12 +197,14 @@ function cargarTablaInventario() {
             var inventario = listadoInventario[i];
             // Obtén el valor del campo de entrada del objeto, si existe
             var inputValue = inputValues[inventario.id_producto] || inventario.cantidad;
+            var inputValue2 = inputValues2[inventario.id_producto] || 0;
             var fila = `
               <tr>
                 <td>${i + 1}</td>
                 <td>${inventario.nombre_producto}</td>
-                <td><input type="number" value="${inputValue}" id="${inventario.id_producto}" name="${inventario.id_producto}" class="form-control"></td>
-              </tr>
+                <td><input type="number" value="${inputValue}" id="${inventario.id_producto}" name="${inventario.id_producto}" class="form-control" disabled></td>
+                <td><input type="number" value="${inputValue2}" id="${inventario.id_producto}" name="${inventario.id_producto}" class="form-control" ></td>
+                </tr>
             `;
             tablaHtmlInventario += fila;
           }
@@ -236,15 +245,15 @@ function cargarTablaInventario() {
         if (event.target.tagName === "INPUT") {
           var productId = event.target.id;
           var productValue = event.target.value;
-          inputValues[productId] = productValue;
+          inputValues2[productId] = productValue;
         }
       });
-      console.log(inputValues);
+      console.log(inputValues2);
       if(jsBotonGuardarInventario){
         jsBotonGuardarInventario.addEventListener("click", function () {
-          console.log(inputValues);
+          console.log(inputValues2);
           opcion = "ActualizarInventario";
-          let inventario_productos_json = JSON.stringify(inputValues);
+          let inventario_productos_json = JSON.stringify(inputValues2);
           var data = "opcion=" + opcion + "&inventario_productos=" + inventario_productos_json;
           var xhr = new XMLHttpRequest();
           xhr.open("POST", "app/controlador/CenaControlador.php", true);
@@ -259,6 +268,7 @@ function cargarTablaInventario() {
                   showConfirmButton: false,
                   timer: 1000,
                 });
+                cargarTablaInventario();
               }
             }
           };
@@ -1441,6 +1451,12 @@ function cargarTablaHistorialFactura() {
         for (var i = startIndex; i < endIndex; i++) {
           if (listadoFactura[i]) {
             var facturaData = listadoFactura[i];
+            var btneliminar="";
+            if(user_name){
+             if(user_name.value!="cena"){
+               btneliminar="btnEliminarFactura";
+             }
+            }
             if(facturaData.estado=="PAGADO")
             {
                estadoF='<td><label style="color:#45a33f;">'+facturaData.estado+'</label></td>';
@@ -1466,9 +1482,9 @@ function cargarTablaHistorialFactura() {
               facturaData.id_factura
             }"><i class="bi bi-eye btniVerFactura" data-id="${
               facturaData.id_factura
-            }"></i></button>&nbsp;&nbsp;<br><button class="btn btn-danger btnEliminarFactura" data-id="${
+            }"></i></button>&nbsp;&nbsp;<br><button class="btn btn-danger ${btneliminar}" data-id="${
               facturaData.id_factura
-            }"><i class="bi bi-trash btnEliminarFactura" data-id="${
+            }"><i class="bi bi-trash ${btneliminar}" data-id="${
               facturaData.id_factura
             }"></i></button></td>
 
@@ -1812,9 +1828,16 @@ function cargarTablaFacturaCena() {
         inputTotal.value = 0;
         inputTotal.disabled=true;
         celdaTotal.appendChild(inputTotal);
+        conta++;
 
         var celdaCantidadProducto = nuevaFila.insertCell(-1);
-        celdaCantidadProducto.textContent = producto.cantidad;
+        var inputCantidadProducto = document.createElement("input");
+        inputCantidadProducto.type = "text";
+        inputCantidadProducto.name = `campo${i}${conta}`;
+        inputCantidadProducto.className = "form-control";
+        inputCantidadProducto.value = producto.cantidad;
+        inputCantidadProducto.disabled=true;
+        celdaCantidadProducto.appendChild(inputCantidadProducto);
 
         inputCantidad.addEventListener("change", (function(cantidad, precio, inputTotal) {
           return function() {
@@ -1883,6 +1906,12 @@ if(BtnCalcularFacturaCena)
     for (var i = 0; i < inputsTotal.length; i++) {
       total += parseFloat(inputsTotal[i].value);
     }
+    if(AbonoFacturaCena.value == ""){
+      AbonoFacturaCena.value =0;
+    }
+    if(CambioFacturaCena.value == ""){
+      CambioFacturaCena.value=0;
+    }
 
      if(jsSpcliente.value == 0){
       jsCheckPendientePorPagar.disabled=false;
@@ -1895,15 +1924,15 @@ if(BtnCalcularFacturaCena)
       CambioFacturaCena.value=0;
     }
 
-    // if(AbonoFacturaCena.value != "" &&  AbonoFacturaCena.value!=0 && jsSpcliente.value != 0 && jsCheckPendientePorPagar.checked ){
-    //   SaldoPendienteFacturaCena.value=parseFloat(SaldoPendienteFacturaCena.value)-parseFloat(AbonoFacturaCena.value);
-    //   cuentacheck=cuentacheck+1;
-    // }
-     if(AbonoFacturaCena.value != "" &&  AbonoFacturaCena.value!=0 ){
+    if (jsCheckPendientePorPagar.checked) {
       SaldoPendienteFacturaCena.value=parseFloat( TotalFacturaCena.value) + parseFloat(jsSpcliente.value) -parseFloat(AbonoFacturaCena.value);
+    } else{
+      if(jsSpcliente.value != 0){
+        SaldoPendienteFacturaCena.value=parseFloat( TotalFacturaCena.value) + parseFloat(jsSpcliente.value) -parseFloat(AbonoFacturaCena.value);
+      } else{
+        SaldoPendienteFacturaCena.value=0;
+      }
     }
-
-    console.log(cuentacheck);
 
   });
 }
@@ -1941,6 +1970,7 @@ if (btnRegistrarFacturaCena) {
       return;
     }
     if (SaldoPendiente == 0) {
+      abono=abono-totalTotal;
       estado = "PAGADO";
     } else {
       estado = "PENDIENTE";
@@ -1963,6 +1993,7 @@ if (btnRegistrarFacturaCena) {
       var cantidad = celdas[1].getElementsByTagName("input")[0].value;
       var precio_unitario = celdas[2].getElementsByTagName("input")[0].value;
       var total = celdas[3].getElementsByTagName("input")[0].value;
+      var CantidadProductoRestantes = celdas[4].getElementsByTagName("input")[0].value;
       var cantidadC=parseFloat(cantidad);
        if(cantidadC != 0)
        {
@@ -1971,10 +2002,12 @@ if (btnRegistrarFacturaCena) {
           cantidad_producto: cantidad,
           valor_unitario: precio_unitario,
           total_producto: total,
+          productos_restantes: CantidadProductoRestantes
         };
         contf= contf+1;
       }
     }
+    console.log(factura);
     var data =
       "estado=" +
       estado +
@@ -2078,11 +2111,11 @@ function consultarInformeGeneral() {
              AbonosAnteriores=parseFloat(consultaInforme.abono.suma_abono)-parseFloat(consultaInforme.factura.suma_abono);
           }
 
-          var totalInformeGeneral=(parseFloat(consultaInforme.factura.suma_total)-parseFloat(consultaInforme.factura.suma_saldo_pendiente))+parseFloat(AbonosAnteriores);
+          var totalInformeGeneral=(parseFloat(consultaInforme.factura.suma_total)-parseFloat(consultaInforme.factura.suma_saldo_pendiente))-parseFloat(consultaInforme.factura.suma_cambio);
           var tablaHtmlInforme = `
             <tr>
             <td>${formatearNumero(consultaInforme.factura.suma_total)}</td>
-            <td>${formatearNumero(AbonosAnteriores)}</td>
+            <td>0</td>
             <td>${formatearNumero(consultaInforme.factura.suma_saldo_pendiente)}</td>
             <td>${formatearNumero(consultaInforme.factura.suma_cambio)}</td>
             <td>${formatearNumero(totalInformeGeneral)}</td>
@@ -2171,11 +2204,11 @@ function consultarInformeGeneralPorFecha() {
                AbonosAnteriores=parseFloat(consultaInforme.abono.suma_abono)-parseFloat(consultaInforme.factura.suma_abono);
             }
 
-            var totalInformeGeneral=(parseFloat(consultaInforme.factura.suma_total)-parseFloat(consultaInforme.factura.suma_saldo_pendiente))+parseFloat(AbonosAnteriores);
+            var totalInformeGeneral=(parseFloat(consultaInforme.factura.suma_total)-parseFloat(consultaInforme.factura.suma_saldo_pendiente))-parseFloat(consultaInforme.factura.suma_cambio);
             var tablaHtmlInforme = `
               <tr>
               <td>${formatearNumero(consultaInforme.factura.suma_total)}</td>
-              <td>${formatearNumero(AbonosAnteriores)}</td>
+              <td>0</td>
               <td>${formatearNumero(consultaInforme.factura.suma_saldo_pendiente)}</td>
               <td>${formatearNumero(consultaInforme.factura.suma_cambio)}</td>
               <td>${formatearNumero(totalInformeGeneral)}</td>
@@ -2228,18 +2261,6 @@ function consultarInformeDeProductos() {
             });
             return;
           }
-          function formatearNumero(numero) {
-            if (numero === null || numero === undefined) {
-              return ""; // O cualquier otro valor predeterminado que desees
-            }
-
-            const options = {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 0,
-            };
-
-            return new Intl.NumberFormat("es-ES", options).format(numero);
-          }
 
             Swal.fire({
               title: 'Cargando...',
@@ -2249,22 +2270,43 @@ function consultarInformeDeProductos() {
                 Swal.showLoading()
               },
             })
+            function formatearNumero(numero) {
+              if (numero === null || numero === undefined) {
+                return ""; // O cualquier otro valor predeterminado que desees
+              }
 
+              const options = {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              };
+
+              return new Intl.NumberFormat("es-ES", options).format(numero);
+            }
             for (var i = 0; i < consultaInforme.length; i++) {
-              if (consultaInforme[i]) {
-                var cantidad = consultaInforme[i].cantidad;
-                var nombre_producto = consultaInforme[i].nombre_producto;
-                var fila = `
-                  <tr>
-                    <td>${nombre_producto}</td>
-                    <td>${cantidad}</td>
-                  </tr>
-                `;
-                tablaHtmlInformeProducto += fila;
+              var item = consultaInforme[i].informe_producto;
+              if (item) {
+                for (var i = 0; i < item.length; i++) {
+                  var item2 = item[i];
+                  if (item2) {
+                    var cantidad = item2.cantidad;
+                    var nombre_producto = item2.nombre_producto;
+                    var monto_total = item2.monto_total;
+                    var precioP = item2.precio;
+                    var fila = `
+                    <tr>
+                      <td>${nombre_producto}</td>
+                      <td>${cantidad}</td>
+                      <td>${precioP}</td>
+                      <td>${monto_total.toLocaleString("es-Es")}</td>
+                    </tr>
+                  `;
+                    tablaHtmlInformeProducto += fila;
+                  }
+                }
               }
             }
-
-        jsTablaInformeProducto.innerHTML = tablaHtmlInformeProducto;
+            jsTablaInformeProducto.innerHTML = tablaHtmlInformeProducto;
+            jstotalGeneralProducto.textContent=consultaInforme[0].monto_total.toLocaleString("es-ES");
       } else if (xhr.readyState === 4 && xhr.status !== 200) {
         alert(
           "Error en la solicitud: " +
@@ -2352,7 +2394,7 @@ function consultarInformeGeneralPorPeriodos() {
             })
 
 
-            var totalInformeGeneral=(parseFloat(consultaInforme.suma_total)-parseFloat(consultaInforme.suma_saldo_pendiente));
+            var totalInformeGeneral=(parseFloat(consultaInforme.suma_total)-parseFloat(consultaInforme.suma_saldo_pendiente))-parseFloat(consultaInforme.suma_cambio);
             var tablaHtmlInforme = `
               <tr>
               <td>${formatearNumero(consultaInforme.suma_total)}</td>
@@ -2437,4 +2479,65 @@ if( jsListadoClientesFactura){
     xhr.send(data);
   });
 
+}
+
+if(jsLLenar_Informe_Producto){
+  opcion = "ConsultarInformeDeProductos";
+  var fechaInforme = Fecha_Informe_Producto;
+  var tablaHtmlInformeProducto="";
+
+  var data = "opcion=" + opcion + "&fechaInforme="+ fechaInforme;
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "app/controlador/CenaControlador.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var consultaInforme = JSON.parse(this.responseText);
+
+          for (var i = 0; i < consultaInforme.length; i++) {
+            var item = consultaInforme[i].informe_producto;
+            if (item) {
+              for (var i = 0; i < item.length; i++) {
+                var item2 = item[i];
+                if (item2) {
+                  var cantidad = item2.cantidad;
+                  var nombre_producto = item2.nombre_producto;
+                  var monto_total = item2.monto_total;
+                  var precioP = item2.precio;
+                  var fila = `
+                  <tr>
+                    <td style="font-size: 12px; text-align: center;">&nbsp;&nbsp;${nombre_producto}-&nbsp;</td>
+                    <td style="font-size: 12px; text-align: center;">${cantidad} -</td>
+                    <td style="font-size: 12px; text-align: center;">&nbsp;${precioP} -</td>
+                    <td style="font-size: 12px; text-align: center;">&nbsp;${monto_total.toLocaleString("es-Es")}&nbsp;</td>
+                  </tr>
+                `;
+                  tablaHtmlInformeProducto += fila;
+                }
+              }
+            }
+          }
+          jsLLenar_Informe_Producto.innerHTML = tablaHtmlInformeProducto;
+          jsTotal_Informe_Producto.textContent=consultaInforme[0].monto_total.toLocaleString("es-ES");
+    } else if (xhr.readyState === 4 && xhr.status !== 200) {
+      alert(
+        "Error en la solicitud: " +
+          xhr.status +
+          " " +
+          xhr.statusText +
+          " " +
+          xhr.response
+      );
+    }
+  };
+  xhr.send(data);
+
+}
+
+if(jsbtnImprimirInformeProducto){
+ jsbtnImprimirInformeProducto.addEventListener("click", function (e) {
+  var fechaInformeP = jsFechaDeInformeProducto.value;
+  window.open("/cena/VerInformeProducto?fecha_informe_producto=" + fechaInformeP, "_blank");
+ });
 }

@@ -17,9 +17,9 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-6 mb-4">
-                                                       Seleccione un cliente
-                                                        <select class="form-select" id="ListadoClientesFactura">
-                                                        </select>
+                                                    Seleccione un cliente
+                                                    <select class="form-select" id="ListadoClientesFactura">
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="table-responsive">
@@ -61,16 +61,35 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row mt-3">
-                                                <div class="col-md-12 d-flex justify-content-center">
-                                                    <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" id="checkPendientePorPagar" disabled >
-                                                        <label class="form-check-label">Pendiente Por Pagar</label>
+                                            <br>
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" id="checkPendientePorPagar" disabled>
+                                                            <label class="form-check-label">SWITCH Pendiente Por Pagar</label>
+                                                        </div>
                                                     </div>
-                                                    <button type="button" class="btn btn-secondary btnCalcular mx-3">CALCULAR</button>
-                                                    <button type="button" class="btn btn-primary btnRegistrarFacturaCena mx-3">GUARDAR</button>
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-secondary btnCalcular">CALCULAR</button>
+                                                        <button type="button" class="btn btn-primary btnRegistrarFacturaCena">GUARDAR</button>
+                                                    </div>
                                                 </div>
                                             </div>
+
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <b> - Para pagar las facturas a credito se debe activar el switch Pendiente Por Pagar</b>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <b> - Si el switch esta desactivado el programa entendera que la factura se pago de contado</b>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <b> - El switch se deshabilita para facturas que tienen saldos anteriores, para estas facturas no es nesecario el switch</b>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

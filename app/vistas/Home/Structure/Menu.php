@@ -1,4 +1,7 @@
-
+<?php
+$a=$_SESSION['sesion_active']["user"];
+var_dump($a);
+?>
 <div id="sidebar" class="active">
     <div class="sidebar-wrapper active">
 
@@ -18,6 +21,7 @@
                     <a href="index.html" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Tablero</span>
+                        <input type="text" value="<?php echo $a?>" id="user_name" hidden >
                     </a>
                 </li>
 

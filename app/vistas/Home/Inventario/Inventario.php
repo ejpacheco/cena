@@ -30,7 +30,8 @@
                                                     <tr>
                                                         <th>N°</th>
                                                         <th>NOMBRE DEL PRODUCTO</th>
-                                                        <th>CANTIDAD</th>
+                                                        <th>CANTIDAD ACTUAL</th>
+                                                        <th>NUEVO VALOR</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="TablaInventario">
