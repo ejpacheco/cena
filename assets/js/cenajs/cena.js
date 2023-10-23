@@ -23,6 +23,7 @@ var jsFormRegistrarFactura = document.getElementById("RegistrarFactura");
 var jsFormResgistrar_Form_Abono=document.getElementById("Resgistrar_Form_Abono");
 
 // campos
+var numero_factura=document.querySelector("#numero_factura");
 var jsbonificacion=document.querySelector("#bonificacion");
 var jsBonificacionFacturaCena=document.querySelector("#BonificacionFacturaCena");
 var user_name=document.querySelector("#user_name");
@@ -1369,7 +1370,8 @@ function ConsultarFactura(id_facturaG) {
       jsVerabono_factura.textContent=parseFloat(DatosFactura[0].abono).toLocaleString();
       jsVersaldo_pendiente.textContent=parseFloat(DatosFactura[0].saldo_pendiente).toLocaleString();
       jsVercambio.textContent=parseFloat(DatosFactura[0].cambio).toLocaleString();
-      jsbonificacion.textContent=parseFloat(DatosFactura[0].bonificacion).toLocaleString();;
+      jsbonificacion.textContent=parseFloat(DatosFactura[0].bonificacion).toLocaleString();
+      numero_factura.textContent=DatosFactura[0].id_factura;
       for(var i = 0; i < DatosFactura.length; i++) {
         var nombre_producto = DatosFactura[i].nombre_producto;
         var cantidad = parseFloat(DatosFactura[i].cantidad);
@@ -1635,7 +1637,7 @@ if (jsTablaHistorialFactura) {
       jsvaloAbonoViejoF.value=Abono_Viejo;
       jsid_facturaF.value=id_factura;
     }
-    else if (event.target.classList.contains("btniVerFactura"))
+    else if (event.target.classList.contains("btnVerFactura"))
     {
       let id_factura= event.target.getAttribute("data-id");
       window.open("/cena/VerFactura?id_factura=" + id_factura, "_blank");

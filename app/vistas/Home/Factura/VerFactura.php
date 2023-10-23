@@ -31,6 +31,10 @@
             <td colspan="2"><b>Fecha:&nbsp;</b></td>
             <td><label id="fecha_factura"></label></td>
         </tr>
+        <tr>
+            <td colspan="2" ><b>Nº:&nbsp;</b></td>
+            <td><label id="numero_factura"></label></td>
+        </tr>
     </tbody>
 </table>
 ============================

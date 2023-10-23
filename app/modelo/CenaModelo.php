@@ -183,7 +183,7 @@ class CenaModelo
 
       static public function ConsultarFactura($datos)
       {
-            $x = Conexion::conectar()->prepare("SELECT F.tbl_cambio as cambio, F.tbl_total as total, F.tbl_bonificacion as bonificacion, F.tbl_abono as abono, F.tbl_saldo_pendiente as saldo_pendiente, F.tbl_fecha_creacion as fecha_creacion, F.tbl_fecha_actualizacion as fecha_actualizacion, FP.tbl_cantidad as cantidad, FP.tbl_precio as precio, FP.tbl_total as total_producto, P.tbl_productos_nombre as nombre_producto, C.tbl_clientes_nombre as nombre_cliente FROM tbl_factura as F INNER JOIN tbl_factura_productos as FP on F.tbl_id_factura=FP.tbl_id_factura INNER JOIN tbl_productos as P on FP.tbl_id_producto=P.tbl_productos_id INNER JOIN tbl_clientes as C on F.tbl_id_cliente=C.tbl_clientes_id WHERE F.tbl_id_factura=:id_factura");
+            $x = Conexion::conectar()->prepare("SELECT F.tbl_id_factura as id_factura, F.tbl_cambio as cambio, F.tbl_total as total, F.tbl_bonificacion as bonificacion, F.tbl_abono as abono, F.tbl_saldo_pendiente as saldo_pendiente, F.tbl_fecha_creacion as fecha_creacion, F.tbl_fecha_actualizacion as fecha_actualizacion, FP.tbl_cantidad as cantidad, FP.tbl_precio as precio, FP.tbl_total as total_producto, P.tbl_productos_nombre as nombre_producto, C.tbl_clientes_nombre as nombre_cliente FROM tbl_factura as F INNER JOIN tbl_factura_productos as FP on F.tbl_id_factura=FP.tbl_id_factura INNER JOIN tbl_productos as P on FP.tbl_id_producto=P.tbl_productos_id INNER JOIN tbl_clientes as C on F.tbl_id_cliente=C.tbl_clientes_id WHERE F.tbl_id_factura=:id_factura");
             $x->bindParam(":id_factura", $datos["id_factura"], PDO::PARAM_INT);
             $x->execute();
             return $x->fetchAll(PDO::FETCH_ASSOC);
