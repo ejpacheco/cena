@@ -1922,7 +1922,9 @@ if(BtnCalcularFacturaCena)
      }
 
     if(CambioFacturaCena.value != "" ) {
+      console.log("cambio");
       TotalFacturaCena.value = total-parseFloat(CambioFacturaCena.value);
+      total= TotalFacturaCena.value;
     }else{
       TotalFacturaCena.value = total;
       CambioFacturaCena.value=0;
@@ -1930,6 +1932,7 @@ if(BtnCalcularFacturaCena)
 
     if(jsBonificacionFacturaCena.value != ""){
       TotalFacturaCena.value = total-parseFloat(jsBonificacionFacturaCena.value);
+      total= TotalFacturaCena.value;
     }else{
       TotalFacturaCena.value = total;
       jsBonificacionFacturaCena.value=0;
