@@ -1988,7 +1988,7 @@ if (btnRegistrarFacturaCena) {
       return;
     }
     if (SaldoPendiente == 0) {
-      if(jsCheckPendientePorPagar.disabled==true){
+      if(jsCheckPendientePorPagar.disabled==true && abono != 0){
         abono=abono-totalTotal;
       }
       estado = "PAGADO";
