@@ -32,7 +32,7 @@
             <td><label id="fecha_factura"></label></td>
         </tr>
         <tr>
-            <td colspan="2" ><b>Nº:&nbsp;</b></td>
+            <td colspan="2" ><b>N&#186;:&nbsp;</b></td>
             <td><label id="numero_factura"></label></td>
         </tr>
     </tbody>
