@@ -1386,20 +1386,11 @@ function ConsultarFactura(id_facturaG) {
 
 
         // Añadimos los valores a las celdas
-        celdaCantidad.innerHTML ="&nbsp;&nbsp;"+cantidad.toLocaleString()+"-&nbsp;";
-        celdaNombreProducto.innerHTML = nombre_producto+" - ";
-        celdaPrecio.innerHTML = "&nbsp;"+precio.toLocaleString()+" - ";
-        celdaTotal.innerHTML = "&nbsp;"+total_producto.toLocaleString()+"&nbsp;";
+        celdaCantidad.innerHTML =cantidad.toLocaleString();
+        celdaNombreProducto.innerHTML = nombre_producto;
+        celdaPrecio.innerHTML = precio.toLocaleString();
+        celdaTotal.innerHTML = total_producto.toLocaleString();
 
-        celdaNombreProducto.style.fontSize="12px";
-        celdaCantidad.style.fontSize="12px";
-        celdaTotal.style.fontSize="12px";
-        celdaPrecio.style.fontSize="12px";
-
-        celdaNombreProducto.style.textAlign="center";
-        celdaCantidad.style.textAlign="center";
-        celdaTotal.style.textAlign="center";
-        celdaPrecio.style.textAlign="center";
         // Agregamos las celdas a la fila
         fila.appendChild(celdaCantidad);
         fila.appendChild(celdaNombreProducto);
