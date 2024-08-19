@@ -1390,6 +1390,7 @@ function ConsultarFactura(id_facturaG) {
         celdaTotal.innerHTML = total_producto.toLocaleString();
 
         celdaTotal.classList.add("small-font"); // Añade la clase que desees
+        celdaCantidad.classList.add("cantidad-cell");
 
         // Agregamos las celdas a la fila
         fila.appendChild(celdaCantidad);

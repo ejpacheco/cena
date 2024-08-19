@@ -43,13 +43,17 @@
         tbody tr {
             border-top: 2px solid #ddd; /* Línea de separación entre filas */
         }
+        /* Clase para ajustar el tamaño de la fuente en la celda "Cantidad" */
+        .cantidad-cell {
+            font-size: 15px; /* Tamaño de fuente reducido para "Cantidad" */
+        }
         /* Clase para ajustar el tamaño de la fuente solo en la celda "Total" del encabezado */
         .total-header {
             font-size: 14px; /* Tamaño de fuente ajustado */
         }
         /* Clase para ajustar el tamaño de la fuente solo en la celda "Total" del pie de página */
         .small-font {
-            font-size: 15px; /* Tamaño de fuente reducido */
+            font-size: 14px; /* Tamaño de fuente reducido */
         }
     </style>
 </head>
@@ -95,7 +99,7 @@
     <table class="text-left">
         <thead>
             <tr>
-                <th>Cant.</th>
+                <th class="cantidad-cell">Cant.</th> <!-- Aplicar clase cantidad-cell aquí -->
                 <th>Producto</th>
                 <th class="total-header">Total</th> <!-- Aplicar clase total-header aquí -->
             </tr>
@@ -112,20 +116,20 @@
                 <td class="small-font"><label id="total_factura"></label></td>
             </tr>
             <tr>
-                <th colspan="2">Abono</th>
-                <td><label id="abono_factura"></label></td>
+                <th colspan="2" class="small-font">Abono</th>
+                <td class="small-font"><label id="abono_factura"></label></td>
             </tr>
             <tr>
-                <th colspan="2">Saldo pendiente</th>
-                <td><label id="saldo_pendiente"></label></td>
+                <th colspan="2" class="small-font">Saldo pendiente</th>
+                <td class="small-font"><label id="saldo_pendiente"></label></td>
             </tr>
             <tr>
-                <th colspan="2">Cambio</th>
-                <td><label id="cambio"></label></td>
+                <th colspan="2" class="small-font">Cambio</th>
+                <td class="small-font"><label id="cambio"></label></td>
             </tr>
             <tr>
-                <th colspan="2">Bonificacion</th>
-                <td><label id="bonificacion"></label></td>
+                <th colspan="2" class="small-font">Bonificacion</th>
+                <td class="small-font"><label id="bonificacion"></label></td>
             </tr>
         </tfoot>
     </table>
