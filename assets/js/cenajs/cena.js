@@ -1382,19 +1382,18 @@ function ConsultarFactura(id_facturaG) {
         var celdaCantidad = document.createElement("td");
         var celdaNombreProducto = document.createElement("td");
         var celdaTotal = document.createElement("td");
-        var celdaPrecio = document.createElement("td");
 
 
         // Añadimos los valores a las celdas
         celdaCantidad.innerHTML =cantidad.toLocaleString();
         celdaNombreProducto.innerHTML = nombre_producto;
-        celdaPrecio.innerHTML = precio.toLocaleString();
         celdaTotal.innerHTML = total_producto.toLocaleString();
+
+        celdaTotal.classList.add("small-font"); // Añade la clase que desees
 
         // Agregamos las celdas a la fila
         fila.appendChild(celdaCantidad);
         fila.appendChild(celdaNombreProducto);
-        fila.appendChild(celdaPrecio);
         fila.appendChild(celdaTotal);
 
         // Agregamos la fila a la tabla
@@ -2501,6 +2500,8 @@ if( jsListadoClientesFactura){
 
 }
 
+
+//informe de producto general
 if(jsLLenar_Informe_Producto){
   opcion = "ConsultarInformeDeProductos";
   var fechaInforme = Fecha_Informe_Producto;
@@ -2527,10 +2528,10 @@ if(jsLLenar_Informe_Producto){
                   var precioP = item2.precio;
                   var fila = `
                   <tr>
-                    <td style="font-size: 12px; text-align: center;">&nbsp;&nbsp;${nombre_producto}-&nbsp;</td>
-                    <td style="font-size: 12px; text-align: center;">${cantidad} -</td>
-                    <td style="font-size: 12px; text-align: center;">&nbsp;(${precioP}) -</td>
-                    <td style="font-size: 12px; text-align: center;">&nbsp;(${monto_total.toLocaleString("es-Es")})&nbsp;</td>
+                    <td >${nombre_producto}</td>
+                    <td >${cantidad} </td>
+                    <td >(${precioP}) </td>
+                    <td>(${monto_total.toLocaleString("es-Es")})</td>
                   </tr>
                 `;
                   tablaHtmlInformeProducto += fila;
@@ -2591,10 +2592,10 @@ if (jsLLenar_Informe_Producto_Hoy) {
         var resultado = consultaInforme.resultados[i].resultado;
         var fila = `
             <tr>
-              <td style="font-size: 7px; text-align: center;">(${cantidad}) -</td>
-              <td style="font-size: 7px; text-align: center;">${nombre_producto} -</td>
-              <td style="font-size: 7px; text-align: center;">(${precio}) -</td>
-              <td style="font-size: 7px; text-align: center;">(${resultado})</td>
+              <td >(${cantidad}) </td>
+              <td >${nombre_producto} </td>
+              <td>(${precio}) </td>
+              <td >(${resultado})</td>
             </tr>
           `;
         tablaHtmlInformeProducto += fila;

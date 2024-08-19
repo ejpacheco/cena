@@ -19,7 +19,7 @@
             border-bottom: 1px solid #ddd; /* Línea sutil para separación de filas */
         }
         th {
-            font-size: 12px; /* Tamaño de letra para encabezados */
+            font-size: 11px; /* Tamaño de letra para encabezados */
             background-color: #f4f4f4; /* Fondo gris claro para encabezados */
         }
         td {
@@ -43,6 +43,14 @@
         tbody tr {
             border-top: 2px solid #ddd; /* Línea de separación entre filas */
         }
+        /* Clase para ajustar el tamaño de la fuente solo en la celda "Total" del encabezado */
+        .total-header {
+            font-size: 14px; /* Tamaño de fuente ajustado */
+        }
+        /* Clase para ajustar el tamaño de la fuente solo en la celda "Total" del pie de página */
+        .small-font {
+            font-size: 15px; /* Tamaño de fuente reducido */
+        }
     </style>
 </head>
 <body>
@@ -60,26 +68,26 @@
                 <td colspan="3" class="separator"></td>
             </tr>
             <tr>
-                <td colspan="2"><b>Nit:&nbsp;</b></td>
+                <td colspan="2"><b>Nit</b></td>
                 <td>1.128.268.195</td>
             </tr>
             <tr>
-                <td colspan="2"><b>Direccion:&nbsp;</b></td>
+                <td colspan="2"><b>Direccion</b></td>
                 <td>CRA 18 58-44 Buena Esperanza Local 3</td>
             </tr>
             <tr>
                 <td colspan="3" class="separator"></td>
             </tr>
             <tr>
-                <td colspan="2"><b>Cliente:&nbsp;</b></td>
+                <td colspan="2"><b>Cliente</b></td>
                 <td><label id="nombre_cliente_factura"></label></td>
             </tr>
             <tr>
-                <td colspan="2"><b>Fecha:&nbsp;</b></td>
+                <td colspan="2"><b>Fecha</b></td>
                 <td><label id="fecha_factura"></label></td>
             </tr>
             <tr>
-                <td colspan="2"><b>N&#186;:&nbsp;</b></td>
+                <td colspan="2"><b>N&#186;</b></td>
                 <td><label id="numero_factura"></label></td>
             </tr>
         </tbody>
@@ -89,8 +97,7 @@
             <tr>
                 <th>Cant.</th>
                 <th>Producto</th>
-                <th>Precio</th>
-                <th>Total</th>
+                <th class="total-header">Total</th> <!-- Aplicar clase total-header aquí -->
             </tr>
         </thead>
         <tbody id="LLenar_Productos_Factura">
@@ -101,23 +108,23 @@
                 <td colspan="4" class="separator"></td>
             </tr>
             <tr>
-                <th colspan="2">Total:&nbsp;</th>
-                <td><label id="total_factura"></label></td>
+                <th colspan="2" class="small-font">Total</th>
+                <td class="small-font"><label id="total_factura"></label></td>
             </tr>
             <tr>
-                <th colspan="2">Abono:&nbsp;</th>
+                <th colspan="2">Abono</th>
                 <td><label id="abono_factura"></label></td>
             </tr>
             <tr>
-                <th colspan="2">Saldo pendiente:&nbsp;</th>
+                <th colspan="2">Saldo pendiente</th>
                 <td><label id="saldo_pendiente"></label></td>
             </tr>
             <tr>
-                <th colspan="2">Cambio:&nbsp;</th>
+                <th colspan="2">Cambio</th>
                 <td><label id="cambio"></label></td>
             </tr>
             <tr>
-                <th colspan="2">Bonificacion:&nbsp;</th>
+                <th colspan="2">Bonificacion</th>
                 <td><label id="bonificacion"></label></td>
             </tr>
         </tfoot>
